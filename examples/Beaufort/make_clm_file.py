@@ -11,8 +11,8 @@ import pyroms
 import pyroms_toolbox
 import subprocess
 
-irange=(370,580)
-jrange=(460,580)
+irange = (370, 580)
+jrange = (460, 580)
 
 months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 
@@ -20,6 +20,7 @@ src_varname = ['aice', 'hice', 'snow_thick', 'uice_eastward', 'vice_northward']
 part_filename = '/archive/u1/uaf/kate/Arctic2/run46/averages/arctic2_avg_1998-'
 src_grd = pyroms.grid.get_ROMS_grid('ARCTIC2')
 dst_grd = pyroms.grid.get_ROMS_grid('BEAUFORT2')
+
 
 def do_file(month):
     global src_varname

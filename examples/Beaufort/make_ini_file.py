@@ -1,10 +1,10 @@
 import pyroms
 import pyroms_toolbox
 
-src_varname = ['zeta','aice','hice','tisrf','snow_thick', \
-               'ageice','ti','t0mk','s0mk', 'temp','salt','u_eastward','v_northward']
-irange=(370,580)
-jrange=(460,580)
+src_varname = ['zeta', 'aice', 'hice', 'tisrf', 'snow_thick', \
+               'ageice', 'ti', 't0mk', 's0mk', 'temp', 'salt', 'u_eastward', 'v_northward']
+irange = (370, 580)
+jrange = (460, 580)
 #irange = None
 #jrange = None
 
@@ -24,10 +24,10 @@ dst_var = pyroms_toolbox.remapping(src_varname, src_filename, wts_file, \
 #dst_var = pyroms_toolbox.remapping(['uice','vice'], src_filename, \
 #                wts_file, src_grd, dst_grd, rotate_uv=True, \
 #                irange=irange, jrange=jrange, uvar='uice', vvar='vice')
-dst_var = pyroms_toolbox.remapping(['uice_eastward','vice_northward'], src_filename, \
+dst_var = pyroms_toolbox.remapping(['uice_eastward', 'vice_northward'], src_filename, \
                 wts_file, src_grd, dst_grd, rotate_uv=True, \
                 irange=irange, jrange=jrange, \
                 uvar='uice_eastward', vvar='vice_northward', rotate_part=True)
-dst_var = pyroms_toolbox.remapping_tensor(['sig11','sig22','sig12'], src_filename, \
+dst_var = pyroms_toolbox.remapping_tensor(['sig11', 'sig22', 'sig12'], src_filename, \
                 wts_file, src_grd, dst_grd, rotate_sig=True, \
                 irange=irange, jrange=jrange, shapiro=False)

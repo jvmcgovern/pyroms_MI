@@ -21,24 +21,26 @@ Contains:
 
 doclines = __doc__.split("\n")
 
-def configuration(parent_package='',top_path=None):
+
+def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
-    config = Configuration('bathy_smoother',parent_package,top_path,
-         package_path='bathy_smoother')
+    config = Configuration('bathy_smoother', parent_package, top_path,
+                           package_path='bathy_smoother')
     config.set_options(ignore_setup_xxx_py=True,
                        assume_default_configuration=True,
                        delegate_options_to_subpackages=True)
 #                       quiet=True)
     return config
 
+
 if __name__ == '__main__':
     from numpy.distutils.core import setup
-    setup(name = '',
-          version = '0.2.0',
-          description = doclines[0],
-          long_description = "\n".join(doclines[2:]),
-          url = 'https://github.com/ESMG/pyroms',
-          license = 'BSD',
-          platforms = ["any"],
+    setup(name='',
+          version='0.2.0',
+          description=doclines[0],
+          long_description="\n".join(doclines[2:]),
+          url='https://github.com/ESMG/pyroms',
+          license='BSD',
+          platforms=["any"],
           configuration=configuration,
           )

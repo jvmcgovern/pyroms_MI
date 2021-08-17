@@ -10,6 +10,8 @@ from bathy_smoother import *
 
 
 # get horizontal grid from v1
+from bathy_smoother.bathy_smoother import bathy_tools, bathy_smoothing
+
 grd_v1 = pyroms.grid.get_ROMS_grid('YELLOW')
 hgrd = grd_v1.hgrid
 
@@ -21,7 +23,7 @@ lon_corner = 0.5 * (lon[1:] + lon[:-1])
 lat_corner = 0.5 * (lat[1:] + lat[:-1])
 lon = lon[1:-1]
 lat = lat[1:-1]
-z = data.variables['z'][1:-1,1:-1]
+z = data.variables['z'][1:-1, 1:-1]
 z = np.array(z, dtype='float32')
 
 # median filter
@@ -52,14 +54,14 @@ grid_corner_lat = np.zeros((grid_size, 4))
 k = 0
 for j in range(Mp):
     for i in range(Lp):
-        grid_corner_lon[k,0] = lon_corner[j,i]
-        grid_corner_lat[k,0] = lat_corner[j,i]
-        grid_corner_lon[k,1] = lon_corner[j,i+1]
-        grid_corner_lat[k,1] = lat_corner[j,i+1]
-        grid_corner_lon[k,2] = lon_corner[j+1,i+1]
-        grid_corner_lat[k,2] = lat_corner[j+1,i+1]
-        grid_corner_lon[k,3] = lon_corner[j+1,i]
-        grid_corner_lat[k,3] = lat_corner[j+1,i]
+        grid_corner_lon[k, 0] = lon_corner[j, i]
+        grid_corner_lat[k, 0] = lat_corner[j, i]
+        grid_corner_lon[k, 1] = lon_corner[j, i+1]
+        grid_corner_lat[k, 1] = lat_corner[j, i+1]
+        grid_corner_lon[k, 2] = lon_corner[j+1, i+1]
+        grid_corner_lat[k, 2] = lat_corner[j+1, i+1]
+        grid_corner_lon[k, 3] = lon_corner[j+1, i]
+        grid_corner_lat[k, 3] = lat_corner[j+1, i]
         k = k + 1
 
 nc.createDimension('grid_size', grid_size)
@@ -113,13 +115,11 @@ map2_name = 'YELLOW to SRTM bilinear Mapping'
 num_maps = 1
 map_method = 'bilinear'
 
-pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
-              interp_file1, interp_file2, map1_name, \
-              map2_name, num_maps, map_method)
+pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, interp_file1, interp_file2, map1_name,
+                                       map2_name, num_maps, map_method)
 
 # remap bathymetry using scrip
-h = pyroms.remapping.remap(z, 'remap_weights_SRTM_to_YELLOW_bilinear.nc', \
-                           spval=1e37)
+h = pyroms.remapping.remap(z, 'remap_weights_SRTM_to_YELLOW_bilinear.nc',spval=1e37)
 h = -h
 hmin = 5
 h = np.where(h < hmin, hmin, h)

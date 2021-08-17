@@ -75,31 +75,36 @@ Programming Language :: Python
 Topic :: Scientific/Engineering
 Topic :: Software Development :: Libraries :: Python Modules
 """
+# Joe McGovern, Marine Institute 17.08.2021
+# Needed to replace forward slash / with r and backwards slash \ for windows platform
+
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('pyroms', parent_package, top_path)
-    config.add_extension('_interp', sources = ['pyroms/src/interp.f'])
-    config.add_extension('_obs_interp', sources = ['pyroms/src/obs_interp.f'])
-    config.add_extension('_remapping', sources = ['pyroms/src/remapping.f'])
-    config.add_extension('_remapping_fast', sources = ['pyroms/src/remapping_fast.f'])
-    config.add_extension('_remapping_fast_weighted', sources = ['pyroms/src/remapping_fast_weighted.f'])
-    config.add_extension('_iso', sources = ['pyroms/src/iso.f'])
+    config.add_extension('_interp', sources=[r'pyroms\src\interp.f'])
+    config.add_extension('_obs_interp', sources=[r'pyroms\src\obs_interp.f'])
+    config.add_extension('_remapping', sources=[r'pyroms\src\remapping.f'])
+    config.add_extension('_remapping_fast', sources=[r'pyroms\src\remapping_fast.f'])
+    config.add_extension('_remapping_fast_weighted', sources=[r'pyroms\src\remapping_fast_weighted.f'])
+    config.add_extension('_iso', sources=[r'pyroms\src\iso.f'])
     return config
+
 
 doclines = __doc__.split("\n")
 
+
 if __name__ == '__main__':
     from numpy.distutils.core import setup
-    setup(name = "pyroms",
-          version = '0.2.0',
-          description = doclines[0],
-          long_description = "\n".join(doclines[2:]),
-          url = "https://github.com/ESMG/",
-          packages = ['pyroms',
-                      'pyroms.remapping',
-                      'pyroms.extern'],
-          license = 'BSD',
-          platforms = ["any"],
+    setup(name="pyroms",
+          version='0.2.0',
+          description=doclines[0],
+          long_description="\n".join(doclines[2:]),
+          url="https://github.com/ESMG/",
+          packages=['pyroms',
+                    'pyroms.remapping',
+                    'pyroms.extern'],
+          license='BSD',
+          platforms=["any"],
           )
     setup(**configuration(top_path='').todict())

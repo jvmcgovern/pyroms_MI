@@ -76,31 +76,34 @@ Topic :: Scientific/Engineering
 Topic :: Software Development :: Libraries :: Python Modules
 """
 
+# Joe McGovern, Marine Institute 17.08.2021
+# Needed to replace forward slash / with r and backwards slash \ for windows platform
+
 from numpy.distutils.core import Extension
 
-iso = Extension(name = '_iso',
-                sources = ['pyroms/src/iso.f'])
+iso = Extension(name='_iso',
+                sources=[r'pyroms\src\iso.f'])
 
-interp = Extension(name = '_interp',
-                sources = ['pyroms/src/interp.f'])
+interp = Extension(name='_interp',
+                   sources=[r'pyroms\src\interp.f'])
 
-remapping = Extension(name = '_remapping',
-                sources = ['pyroms/src/remapping.f'])
+remapping = Extension(name='_remapping',
+                      sources=[r'pyroms\src\remapping.f'])
 
 doclines = __doc__.split("\n")
 
 if __name__ == '__main__':
     from numpy.distutils.core import setup
-    setup(name = "pyroms",
-          version = '0.1.0',
-          description = doclines[0],
-          long_description = "\n".join(doclines[2:]),
-          url = "https://github.com/ESMG/pyroms",
-          packages = ['pyroms',
-                      'pyroms.remapping',
-                      'pyroms.extern'],
-          license = 'BSD',
-          platforms = ["any"],
-          ext_modules = [iso,interp,remapping],
-          classifiers = [_f for _f in classifiers.split("\n") if _f],
+    setup(name="pyroms",
+          version='0.1.0',
+          description=doclines[0],
+          long_description="\n".join(doclines[2:]),
+          url="https://github.com/ESMG/pyroms",
+          packages=['pyroms',
+                    'pyroms.remapping',
+                    'pyroms.extern'],
+          license='BSD',
+          platforms=["any"],
+          ext_modules=[iso, interp, remapping],
+          classifiers=[_f for _f in classifiers.split("\n") if _f],
           )

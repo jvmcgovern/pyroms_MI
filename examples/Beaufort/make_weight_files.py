@@ -1,23 +1,23 @@
 import pyroms
 
 # Part of Arctic2 grid containing the Beaufort
-irange=(370,580)
-jrange=(460,580)
-#irange=None
-#jrange=None
+irange = (370, 580)
+jrange = (460, 580)
+#irange = None
+#jrange = None
 
 srcgrd = pyroms.grid.get_ROMS_grid('ARCTIC2')
 dstgrd = pyroms.grid.get_ROMS_grid('BEAUFORT2')
 
-pyroms.remapping.make_remap_grid_file(srcgrd,irange=irange,jrange=jrange)
-pyroms.remapping.make_remap_grid_file(srcgrd,Cpos='u',irange=irange,jrange=jrange)
-pyroms.remapping.make_remap_grid_file(srcgrd,Cpos='v',irange=irange,jrange=jrange)
+pyroms.remapping.make_remap_grid_file(srcgrd, irange=irange, jrange=jrange)
+pyroms.remapping.make_remap_grid_file(srcgrd, Cpos='u', irange=irange, jrange=jrange)
+pyroms.remapping.make_remap_grid_file(srcgrd, Cpos='v', irange=irange, jrange=jrange)
 
 pyroms.remapping.make_remap_grid_file(dstgrd)
-pyroms.remapping.make_remap_grid_file(dstgrd,Cpos='u')
-pyroms.remapping.make_remap_grid_file(dstgrd,Cpos='v')
+pyroms.remapping.make_remap_grid_file(dstgrd, Cpos='u')
+pyroms.remapping.make_remap_grid_file(dstgrd, Cpos='v')
 
-type = ['rho','u','v']
+type = ['rho', 'u', 'v']
 
 for typ in type:
     for tip in type:
@@ -32,6 +32,6 @@ for typ in type:
             
         print("Making "+str(interp_file1)+"...")
             
-        pyroms.remapping.compute_remap_weights(grid1_file,grid2_file,\
-                         interp_file1,interp_file2,map1_name,\
-                         map2_name,num_maps,map_method)
+        pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
+                         interp_file1, interp_file2, map1_name, \
+                         map2_name, num_maps, map_method)

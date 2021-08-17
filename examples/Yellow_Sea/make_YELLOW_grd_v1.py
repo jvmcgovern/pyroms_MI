@@ -1,4 +1,6 @@
 import os
+
+from bathy_smoother.bathy_smoother import bathy_tools, bathy_smoothing
 from pyroms import _iso
 import numpy as np
 from mpl_toolkits.basemap import Basemap, shiftgrid
@@ -18,7 +20,7 @@ lon0=117.5 ; lat0 = 41.
 lon1=117.5 ; lat1 = 34.5
 lon2 = 127. ; lat2 = 34.5
 lon3 = 127. ; lat3 = 41.
-map = Basemap(projection='lcc', lat_0=35., lat_1=30., lat_2=40, lon_0 =123, \
+map = Basemap(projection='lcc', lat_0=35., lat_1=30., lat_2=40, lon_0=123,
               width=2000000, height=2000000, resolution='i')
 
 lonp = np.array([lon0, lon1, lon2, lon3])
@@ -42,13 +44,13 @@ hgrd = pyroms.grid.CGrid_geo(lonv, latv, map)
 #    hgrd.mask_polygon(verts)
 # alternate version from johan.navarro.padron
 
-for xx,yy in map.coastpolygons:
+for xx, yy in map.coastpolygons:
     xa = np.array(xx, np.float32)
-    ya = np.array(yy,np.float32)
-    vv = np.zeros((xa.shape[0],2))
+    ya = np.array(yy, np.float32)
+    vv = np.zeros((xa.shape[0], 2))
     vv[:, 0] = xa
     vv[:, 1] = ya
-    hgrd.mask_polygon(vv,mask_value=0)
+    hgrd.mask_polygon(vv, mask_value=0)
 
 # Edit the land mask interactively.
 #pyroms.grid.edit_mask_mesh(hgrd, proj=map)
@@ -79,7 +81,7 @@ topo = np.where(topo < hmin, hmin, topo)
 
 # interpolate new bathymetry
 lon, lat = np.meshgrid(lons, lats)
-h = griddata((lon.flat,lat.flat),topo.flat,(hgrd.lon_rho,hgrd.lat_rho), method='linear')
+h = griddata((lon.flat, lat.flat), topo.flat, (hgrd.lon_rho, hgrd.lat_rho), method='linear')
 
 # insure that depth is always deeper than hmin
 h = np.where(h < hmin, hmin, h)

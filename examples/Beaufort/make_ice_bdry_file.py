@@ -7,14 +7,14 @@ from multiprocessing import Pool
 import pyroms
 import pyroms_toolbox
 
-src_varname = ['aice','hice','tisrf','snow_thick', \
-               'ti','uice_eastward', 'vice_northward']
+src_varname = ['aice', 'hice', 'tisrf', 'snow_thick', \
+               'ti', 'uice_eastward', 'vice_northward']
 #               'ti','uice', 'vice']
 
 src_sigma = ['sig11', 'sig22', 'sig12']
 
-irange=(370,580)
-jrange=(460,580)
+irange = (370, 580)
+jrange = (460, 580)
 #irange = None
 #jrange = None
 
@@ -36,14 +36,14 @@ def do_file(month):
     print('working on file '+src_filename)
 # didn't work even with processes=1
 #    pdb.set_trace()
-    dst_var = pyroms_toolbox.remapping_bound(lcopy, src_filename,\
-                     wts_file,src_grd,dst_grd,rotate_uv=True,\
-                     irange=irange,jrange=jrange, \
+    dst_var = pyroms_toolbox.remapping_bound(lcopy, src_filename, \
+                     wts_file, src_grd, dst_grd, rotate_uv=True, \
+                     irange=irange, jrange=jrange, \
                      uvar='uice_eastward', vvar='vice_northward', rotate_part=True)
 #                     uvar='uice', vvar='vice')
-    dst_var = pyroms_toolbox.remapping_bound_sig(src_sigma, src_filename,\
-                     wts_file,src_grd,dst_grd,rotate_sig=True,\
-                     irange=irange,jrange=jrange)
+    dst_var = pyroms_toolbox.remapping_bound_sig(src_sigma, src_filename, \
+                     wts_file, src_grd, dst_grd, rotate_sig=True,\
+                     irange=irange, jrange=jrange)
 
 processes = 4
 p = Pool(processes)
