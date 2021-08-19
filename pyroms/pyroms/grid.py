@@ -14,7 +14,7 @@ import pyroms
 from pyroms.hgrid import *
 from pyroms.vgrid import *
 from pyroms.grid import *
-from pyroms import io
+from pyroms import ipop
 
 #define a dictionary that will remember gridid's that are defined from
 #a history and grid file. Because this is defined in this model's name
@@ -222,7 +222,7 @@ def get_ROMS_hgrid(gridid):
     gridinfo = ROMS_gridinfo(gridid)
     grdfile = gridinfo.grdfile
 
-    nc = io.Dataset(grdfile)
+    nc = ipop.Dataset(grdfile)
 
     #Check for cartesian or geographical grid
     spherical = nc.variables['spherical'][0]
@@ -405,7 +405,7 @@ def get_ROMS_vgrid(gridid, zeta=None):
     gridinfo = ROMS_gridinfo(gridid)
     grdfile = gridinfo.grdfile
 
-    nc = io.Dataset(grdfile)
+    nc = ipop.Dataset(grdfile)
 
     #Get vertical grid
     try:

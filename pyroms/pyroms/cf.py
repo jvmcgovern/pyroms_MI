@@ -15,7 +15,7 @@ __docformat__ = "restructuredtext en"
 
 import numpy as np
 import cftime
-import pyroms.io
+import pyroms.ipop
 
 class time (np.ndarray):
     """Return time object from netCDF file

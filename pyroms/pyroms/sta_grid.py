@@ -14,7 +14,7 @@ import pyroms
 from pyroms.sta_hgrid import *
 from pyroms.vgrid import *
 from pyroms.grid import *
-from pyroms import io
+from pyroms import ipop
 
 class Stations_Grid(object):
     """
@@ -39,7 +39,7 @@ def get_Stations_hgrid(gridid, sta_file):
     gridinfo = ROMS_gridinfo(gridid)
     grdfile = gridinfo.grdfile
 
-    nc = io.Dataset(sta_file)
+    nc = ipop.Dataset(sta_file)
 
     #Check for cartesian or geographical grid
     spherical = nc.variables['spherical'][:]
