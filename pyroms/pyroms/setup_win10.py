@@ -82,13 +82,13 @@ Topic :: Software Development :: Libraries :: Python Modules
 from numpy.distutils.core import Extension
 
 iso = Extension(name='_iso',
-                sources=['pyroms/src/iso.f'])
+                sources=[r'pyroms\src\iso.f'])
 
 interp = Extension(name='_interp',
-                   sources=['pyroms/src/interp.f'])
+                   sources=[r'pyroms\src\interp.f'])
 
 remapping = Extension(name='_remapping',
-                      sources=['pyroms/src/remapping.f'])
+                      sources=[r'pyroms\src\remapping.f'])
 
 doclines = __doc__.split("\n")
 

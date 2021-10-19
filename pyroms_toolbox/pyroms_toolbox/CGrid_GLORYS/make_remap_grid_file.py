@@ -36,14 +36,14 @@ def make_remap_grid_file(Cgrd, Cpos='t'):
     k = 0
     for j in range(Mp):
         for i in range(Lp):
-            grid_corner_lon[k,0] = lon_corner[j,i]
-            grid_corner_lat[k,0] = lat_corner[j,i]
-            grid_corner_lon[k,1] = lon_corner[j,i+1]
-            grid_corner_lat[k,1] = lat_corner[j,i+1]
-            grid_corner_lon[k,2] = lon_corner[j+1,i+1]
-            grid_corner_lat[k,2] = lat_corner[j+1,i+1]
-            grid_corner_lon[k,3] = lon_corner[j+1,i]
-            grid_corner_lat[k,3] = lat_corner[j+1,i]
+            grid_corner_lon[k, 0] = lon_corner[j, i]
+            grid_corner_lat[k, 0] = lat_corner[j, i]
+            grid_corner_lon[k, 1] = lon_corner[j, i+1]
+            grid_corner_lat[k, 1] = lat_corner[j, i+1]
+            grid_corner_lon[k, 2] = lon_corner[j+1, i+1]
+            grid_corner_lat[k, 2] = lat_corner[j+1, i+1]
+            grid_corner_lon[k, 3] = lon_corner[j+1, i]
+            grid_corner_lat[k, 3] = lat_corner[j+1, i]
             k = k + 1
 
 

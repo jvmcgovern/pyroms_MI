@@ -54,11 +54,11 @@ class CGrid_TPXO8(object):
 
         ones = np.ones(self.z_t.shape)
         a1 = lat_u[yrange[0]:yrange[1]+1, xrange[0]+1:xrange[1]+2] - \
-        lat_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+            lat_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
         a2 = lon_u[yrange[0]:yrange[1]+1, xrange[0]+1:xrange[1]+2] - \
-        lon_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
-        a3 = 0.5*(lat_u[yrange[0]:yrange[1]+1, xrange[0]+1:xrange[1]+2] + \
-        lat_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1])
+             lon_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        a3 = 0.5*(lat_u[yrange[0]:yrange[1]+1, xrange[0]+1:xrange[1]+2] +
+                  lat_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1])
         a2 = np.where(a2 > 180*ones, a2 - 360*ones, a2)
         a2 = np.where(a2 < -180*ones, a2 + 360*ones, a2)
         a2 = a2 * np.cos(np.pi/180.*a3)

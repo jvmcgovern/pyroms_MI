@@ -3,15 +3,14 @@ import pyroms
 from .CGrid_TPXO8 import CGrid_TPXO8
 
 
-def get_nc_CGrid_TPXO8(grdfile, name='TPXO8', \
-                       xrange=(4350, 4550), yrange=(6600, 6900), missing_value=-9999):
+def get_nc_CGrid_TPXO8(grdfile, name='TPXO8', xrange=(4350, 4550), yrange=(6600, 6900), missing_value=-9999):
     """
     grd = get_nc_CGrid_TPXO8(grdfile)
 
     Load Cgrid object for TPXO8 from netCDF file
     """
 
-    nc = pyroms.io.Dataset(grdfile)
+    nc = pyroms.ipop.Dataset(grdfile)
 
     lonh = nc.variables['lon_z'][:]
     lath = nc.variables['lat_z'][:]
@@ -42,7 +41,6 @@ def get_nc_CGrid_TPXO8(grdfile, name='TPXO8', \
     # generate tpxo8 grid
     # xrange = [4400, 4600]
     # yrange = [6600, 6900]
-    return CGrid_TPXO8(lonhh, lathh, lonuu, latuu, lonvv, latvv, \
-                                   h_msk, u_msk, v_msk, \
-                                   zh, zu, zv, missing_value, 'TPXO8', xrange, yrange)
-
+    return CGrid_TPXO8(lonhh, lathh, lonuu, latuu, lonvv, latvv,
+                                   h_msk, u_msk, v_msk,
+                                   zh, zu, zv, missing_value, name, xrange, yrange)

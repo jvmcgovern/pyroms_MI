@@ -9,7 +9,7 @@
 #
 # Recent history:
 #   MGH (mark.hadf@gmail.com) 2019-10-16):
-#     Renamed the netCDF-related macros and made more use of Gnu make "?=" assignments to
+#     Renamed the netCDF-related macros and made more use of Gnu make ":=" assignments to
 #     allow macros to be overridden by environment variables.
 #   MGH (mark.hadf@gmail.com) 2019-10-31):
 #     - Back to ":=" and "=" assignments.
@@ -39,6 +39,7 @@ ifdef USE_NF_CONFIG
 else
     NETCDF_INCDIR ?= $(PREFIX)/include
     NETCDF_LIBDIR ?= $(PREFIX)/lib
+    HDF_LIBDIR ?= /usr/lib/x86_64-linux-gnu/hdf5/serial
     NETCDF_LIBS ?= -lnetcdf -lnetcdff -ljpeg -lmfhdf -ldf -lhdf5 -lhdf5_fortran -lhdf5_hl -lhdf5hl_fortran
 endif
 
@@ -47,7 +48,7 @@ F2PY = f2py
 FFLAGS = -g -fdefault-real-8 -ffixed-form -O2 -fPIC
 F2PY_F90_FLAGS = '-g -fdefault-real-8 -ffixed-form -O2 -fPIC'
 INCLUDE = -I$(SRCDIR) -I$(NETCDF_INCDIR)
-LIB = -L$(SRCDIR) -L$(NETCDF_LIBDIR) $(NETCDF_LIBS)
+LIB = -L$(SRCDIR) -L$(HDF_LIBDIR) -L$(NETCDF_LIBDIR) $(NETCDF_LIBS)
 
 OBJ_SCRIP_EXT  = \
         kinds_mod.o \

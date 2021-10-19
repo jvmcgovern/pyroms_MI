@@ -2,19 +2,19 @@ import os
 import pyroms
 
 
-def compute_remap_weights(grid1_file, grid2_file, \
-       interp_file1, interp_file2, map1_name, \
-       map2_name, num_maps, map_method, \
-       luse_grid1_area='.false.', luse_grid2_area='.false.', \
-       normalize_opt='fracarea', output_opt='scrip', \
-       restrict_type='latitude', num_srch_bins='90', \
+def compute_remap_weights(grid1_file, grid2_file,
+       interp_file1, interp_file2, map1_name,
+       map2_name, num_maps, map_method,
+       luse_grid1_area='.false.', luse_grid2_area='.false.',
+       normalize_opt='fracarea', output_opt='scrip',
+       restrict_type='latitude', num_srch_bins='90',
        grid1_periodic='.false.', grid2_periodic='.false.'):
     '''
     compute remap weights and addresses
     '''
 
     # write namelist file
-    f = open('compute_remap_weights_in','w')
+    f = open('compute_remap_weights_in', 'w')
 
     f.write('&remap_inputs' + '\n')
     f.write('    num_maps = ' + str(num_maps) + '\n')

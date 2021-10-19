@@ -44,6 +44,7 @@ pyroms_toolbox/rvalue.py
 pyroms_toolbox/rx0.py
 pyroms_toolbox/rx1.py
 pyroms_toolbox/setup.py
+pyroms_toolbox/setup_win10.py
 pyroms_toolbox/shapiro_filter.py
 pyroms_toolbox/shift_SODA_data.py
 pyroms_toolbox/smooth_1D.py

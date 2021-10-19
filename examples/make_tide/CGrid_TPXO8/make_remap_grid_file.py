@@ -9,8 +9,7 @@ import pyroms
 
 
 def make_remap_grid_file(Cgrd, Cpos='t'):
-
-    #create remap file
+    # create remap file
     remap_filename = 'remap_grid_' + Cgrd.name + '_' + Cpos + '.nc'
     nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
     nc.Description = 'remap grid file for TPXO8'
@@ -18,9 +17,11 @@ def make_remap_grid_file(Cgrd, Cpos='t'):
     nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     nc.title = Cgrd.name
 
-    lon_corner = Cgrd.lon_t_vert
+    # lon_corner = Cgrd.lon_t_vert
+    lon_corner = Cgrd.lon_t_vert-180
     lat_corner = Cgrd.lat_t_vert
-    grid_center_lon = Cgrd.lon_t.flatten()
+    # grid_center_lon = Cgrd.lon_t.flatten()
+    grid_center_lon = Cgrd.lon_t.flatten()-180
     grid_center_lat = Cgrd.lat_t.flatten()
     Mp, Lp = Cgrd.lon_t.shape
     if Cpos == 't':
@@ -47,8 +48,7 @@ def make_remap_grid_file(Cgrd, Cpos='t'):
             grid_corner_lat[k,3] = lat_corner[j+1,i]
             k = k + 1
 
-
-    #Write netcdf file
+    # Write netcdf file
     nc.createDimension('grid_size', grid_size)
     nc.createDimension('grid_corners', 4)
     nc.createDimension('grid_rank', 2)

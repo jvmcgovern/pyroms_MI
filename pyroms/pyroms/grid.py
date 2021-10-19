@@ -16,13 +16,16 @@ from pyroms.vgrid import *
 from pyroms.grid import *
 from pyroms import ipop
 
-#define a dictionary that will remember gridid's that are defined from
-#a history and grid file. Because this is defined in this model's name
-#space, it will remain persistent.  The keys are the gridid, and the
-#values are ROMS_gridinfo objects.
+# define a dictionary that will remember gridid's that are defined from
+# a history and grid file. Because this is defined in this model's name
+# space, it will remain persistent.  The keys are the gridid, and the
+# values are ROMS_gridinfo objects.
+
 gridid_dictionary={}
 
+
 class ROMS_Grid(object):
+
     """
     grd = ROMS_Grid(hgrid, vgrid)
 
@@ -47,7 +50,7 @@ class ROMS_gridinfo(object):
     To add new grid please edit your gridid.txt. You need to define
     an environment variable PYROMS_GRIDID_FILE pointing to your
     gridid.txt file. Just copy an existing grid and modify the
-    definition accordingly to your case (Be carefull with
+    definition accordingly to your case (Be careful with
     space and blank line).
 
     If grid_file is the path to a ROMS grid file, and hist_file is the
@@ -57,7 +60,7 @@ class ROMS_gridinfo(object):
     included in subsequent calls.
     '''
 
-    def __init__(self, gridid,grid_file=None,hist_file=None):
+    def __init__(self, gridid, grid_file=None, hist_file=None):
       #first determine if the information for the gridid has already been obtained.
       if gridid in gridid_dictionary:
         #print 'CJMP> gridid found in gridid_dictionary, grid retrieved from dictionary'
@@ -68,18 +71,19 @@ class ROMS_gridinfo(object):
         #nope, we need to get the information from gridid.txt or from
         #the grid and history files from the model
         self.id = gridid
-        self._get_grid_info(grid_file,hist_file)
+        self._get_grid_info(grid_file, hist_file)
 
         #now save the data in the dictionary, so we don't need to get it again
         gridid_dictionary[gridid]=self
 
-    def _get_grid_info(self,grid_file,hist_file):
+    def _get_grid_info(self, grid_file, hist_file):
 
-      #check if the grid_file and hist_files are both null; if so get data from gridid.txt
-      if (type(grid_file)==type(None))&(type(hist_file)==type(None)):
+      # check if the grid_file and hist_files are both null; if so get data from gridid.txt
+
+      if (type(grid_file) == type(None)) & (type(hist_file) == type(None)):
         #print 'CJMP> gridid not in dictionary, data will be retrieved from gridid.txt'
         gridid_file =  os.getenv("PYROMS_GRIDID_FILE")
-        data = open(gridid_file,'r')
+        data = open(gridid_file, 'r')
         lines = data.readlines()
         data.close()
 
@@ -478,7 +482,7 @@ def get_ROMS_grid(gridid, zeta=None, hist_file=None,grid_file=None):
     #and gridfile info.  If hist_file and grid_file are defined, the
     #grid info will be extracted from those files and will able to be
     #accessed later by gridid
-    gridinfo = ROMS_gridinfo(gridid,hist_file=hist_file,grid_file=grid_file)
+    gridinfo = ROMS_gridinfo(gridid, hist_file=hist_file, grid_file=grid_file)
     name = gridinfo.name
 
     #we need not pass in hist_file and grid_file here, because the
