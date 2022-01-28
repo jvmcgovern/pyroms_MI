@@ -29,9 +29,13 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
 
     # get time
     nctime.long_name = 'time'
-    nctime.units = 'days since 1900-01-01 00:00:00'
-    # time reference "days since 1900-01-01 00:00:00"
-    ref = datetime(1900, 1, 1, 0, 0, 0)
+    # nctime.units = 'days since 1900-01-01 00:00:00'
+    # # time reference "days since 1900-01-01 00:00:00"
+    # ref = datetime(1900, 1, 1, 0, 0, 0)
+    # ref = date2num(ref)
+    nctime.units = 'days since 1968-05-23 00:00:00'
+    # time reference "days since 1968-05-23 00:00:00"
+    ref = datetime(1968, 5, 23, 0, 0, 0)
     ref = date2num(ref)
     # tag = src_file.rsplit('/')[-1].rsplit('_')[2]
     tag = src_file.rsplit('/')[-1].rsplit('_')[7]
@@ -88,7 +92,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
         Cpos = 'rho'
         z = src_grd.z_t
         Mp, Lp = dst_grd.hgrid.mask_rho.shape
-        wts_file = 'remap_weights_IBI_to_CELTIC_bilinear_t_to_rho.nc'
+        wts_file = 'remap_weights_IBI_to_CELTIC_IV_bilinear_t_to_rho.nc'
         dst_varname = 'zeta'
         dimensions = ('ocean_time', 'eta_rho', 'xi_rho')
         long_name = 'free-surface'
@@ -114,7 +118,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
         Cpos = 'rho'
         z = src_grd.z_t
         Mp, Lp = dst_grd.hgrid.mask_rho.shape
-        wts_file = 'remap_weights_IBI_to_CELTIC_bilinear_t_to_rho.nc'
+        wts_file = 'remap_weights_IBI_to_CELTIC_IV_bilinear_t_to_rho.nc'
         dst_varname = 'temperature'
         dst_varname_north = 'temp_north'
         dimensions_north = ('ocean_time', 's_rho', 'xi_rho')
@@ -138,7 +142,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
         Cpos = 'rho'
         z = src_grd.z_t
         Mp, Lp = dst_grd.hgrid.mask_rho.shape
-        wts_file = 'remap_weights_IBI_to_CELTIC_bilinear_t_to_rho.nc'
+        wts_file = 'remap_weights_IBI_to_CELTIC_IV_bilinear_t_to_rho.nc'
         dst_varname = 'salt'
         dst_varname_north = 'salt_north'
         dimensions_north = ('ocean_time', 's_rho', 'xi_rho')
@@ -232,6 +236,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
     # write data in destination file
     print('write data in destination file')
     nc.variables['ocean_time'][0] = time
+    # nc.variables['zeta_time'][0] = time
     nc.variables[dst_varname_north][0] = np.squeeze(dst_var_north)
     nc.variables[dst_varname_south][0] = np.squeeze(dst_var_south)
     nc.variables[dst_varname_east][0] = np.squeeze(dst_var_east)

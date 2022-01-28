@@ -3,6 +3,7 @@
 # Joe McGovern, Marine Institute, Rinville West, Rinville, Oranmore, Co. Galway 2021
 
 import numpy as np
+import numpy.matlib
 import os
 
 try:
@@ -31,9 +32,13 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
 
     # get time
     nctime.long_name = 'time'
-    nctime.units = 'days since 1900-01-01 00:00:00'
-    # time reference "days since 1900-01-01 00:00:00"
-    ref = datetime(1900, 1, 1, 0, 0, 0)
+    # nctime.units = 'days since 1900-01-01 00:00:00'
+    # # time reference "days since 1900-01-01 00:00:00"
+    # ref = datetime(1900, 1, 1, 0, 0, 0)
+    # ref = date2num(ref)
+    nctime.units = 'days since 1968-05-23 00:00:00'
+    # time reference "days since 1968-05-23 00:00:00"
+    ref = datetime(1968, 5, 23, 0, 0, 0)
     ref = date2num(ref)
     # For IC
     tag = src_file.rsplit('/')[-1].rsplit('_')[7]
@@ -79,6 +84,13 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
 
     # global grid
     if ndim == 3:
+        # Trying to ensure that NaN values (are add_offset in value) don't make it to interpolation JVMCG 26.11.2021
+        src_var_mskd = np.ma.masked_where(src_var == add_offset, src_var)
+        src_rep = np.ma.mean(src_var_mskd, axis=2)
+        src_rep = np.repeat(src_rep[:, :, np.newaxis], src_var.shape[2], axis=2)
+        # src_rep = np.swapaxes(src_rep, 1, 2)
+        src_var = np.where(src_var == add_offset, src_rep, src_var)
+        #
         src_var = src_var[:]
         src_var = src_var[:, np.r_[ystart:np.size(src_var, 1), -1], :]
     elif ndim == 2:

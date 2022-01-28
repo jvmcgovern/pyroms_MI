@@ -36,7 +36,7 @@ src_grd = pyroms_toolbox.CGrid_GLORYS.get_nc_CGrid_CMEMS_IBI(
 # latitude  1D array of values for grid definition             (361 lat)
 # longitude 1D array of values for grid definition             (289 long)
 
-dst_grd = pyroms.grid.get_ROMS_grid('CELTIC')
+dst_grd = pyroms.grid.get_ROMS_grid('CELTIC_V')
 
 # remap
 # To avoid Mercator Ocean Fillvalue of -32767 infiltrating the interpolation process, overwrite/modify the FillValue to
@@ -54,7 +54,7 @@ dst_grd = pyroms.grid.get_ROMS_grid('CELTIC')
 # -a _FillValue,thetao,c,d,1.e37
 
 zeta = remap(file, 'zos', src_grd, dst_grd, dst_dir=dst_dir)  # zos is sea surface height
-dst_grd = pyroms.grid.get_ROMS_grid('CELTIC', zeta=zeta)
+dst_grd = pyroms.grid.get_ROMS_grid('CELTIC_V', zeta=zeta)
 remap(file, 'thetao', src_grd, dst_grd, dst_dir=dst_dir)  # thetao is temperature degrees celsius
 remap(file, 'so', src_grd, dst_grd, dst_dir=dst_dir)      # so is salinity psu
 remap_uv(file, src_grd, dst_grd, dst_dir=dst_dir)         # velocities...

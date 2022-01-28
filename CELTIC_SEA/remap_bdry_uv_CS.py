@@ -29,9 +29,13 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
 
     # get time
     nctime.long_name = 'time'
-    nctime.units = 'days since 1900-01-01 00:00:00'
-    # time reference "days since 1900-01-01 00:00:00"
-    ref = datetime(1900, 1, 1, 0, 0, 0)
+    # nctime.units = 'days since 1900-01-01 00:00:00'
+    # # time reference "days since 1900-01-01 00:00:00"
+    # ref = datetime(1900, 1, 1, 0, 0, 0)
+    # ref = date2num(ref)
+    nctime.units = 'days since 1968-05-23 00:00:00'
+    # time reference "days since 1968-05-23 00:00:00"
+    ref = datetime(1968, 5, 23, 0, 0, 0)
     ref = date2num(ref)
     # tag = src_file.rsplit('/')[-1].rsplit('_')[2]
     tag = src_file.rsplit('/')[-1].rsplit('_')[7]
@@ -87,9 +91,9 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     print("shape 3", src_varu.shape, src_varv.shape)
 
     # get weights file
-    wts_file_a = 'remap_weights_IBI_to_CELTIC_bilinear_t_to_rho.nc'
-    wts_file_u = 'remap_weights_IBI_to_CELTIC_bilinear_u_to_rho.nc'
-    wts_file_v = 'remap_weights_IBI_to_CELTIC_bilinear_v_to_rho.nc'
+    wts_file_a = 'remap_weights_IBI_to_CELTIC_IV_bilinear_t_to_rho.nc'
+    wts_file_u = 'remap_weights_IBI_to_CELTIC_IV_bilinear_u_to_rho.nc'
+    wts_file_v = 'remap_weights_IBI_to_CELTIC_IV_bilinear_v_to_rho.nc'
 
     # build intermediate zgrid
     zlevel = -src_grd.z_t[::-1, 0, 0]
@@ -327,6 +331,7 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     # write data in destination file
     print('write data in destination file')
     ncu.variables['ocean_time'][0] = time
+    ncu.variables['zeta_time'][0] = time
     ncu.variables['u_north'][0] = dst_u_north
     ncu.variables['u_south'][0] = dst_u_south
     ncu.variables['u_east'][0] = dst_u_east
@@ -337,6 +342,7 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     ncu.variables['ubar_west'][0] = dst_ubar_west
 
     ncv.variables['ocean_time'][0] = time
+    ncv.variables['zeta_time'][0] = time
     ncv.variables['v_north'][0] = dst_v_north
     ncv.variables['v_south'][0] = dst_v_south
     ncv.variables['v_east'][0] = dst_v_east

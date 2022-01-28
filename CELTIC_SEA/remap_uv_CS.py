@@ -27,9 +27,13 @@ def remap_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     ystart = 0
     # get time
     nctime.long_name = 'time'
-    nctime.units = 'days since 1900-01-01 00:00:00'
-    # time reference "days since 1900-01-01 00:00:00"
-    ref = datetime(1900, 1, 1, 0, 0, 0)
+    # nctime.units = 'days since 1900-01-01 00:00:00'
+    # # time reference "days since 1900-01-01 00:00:00"
+    # ref = datetime(1900, 1, 1, 0, 0, 0)
+    # ref = date2num(ref)
+    nctime.units = 'days since 1968-05-23 00:00:00'
+    # time reference "days since 1968-05-23 00:00:00"
+    ref = datetime(1968, 5, 23, 0, 0, 0)
     ref = date2num(ref)
     # tag = src_file.rsplit('/')[-1].rsplit('_')[2]
     tag = src_file.rsplit('/')[-1].rsplit('_')[7]

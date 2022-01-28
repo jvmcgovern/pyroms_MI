@@ -66,20 +66,26 @@ lat = np.flipud(lat)
 data_array = np.flipud(data_array)
 
 # Grid dimension
-Lm = 392  # Longitude
-Mm = 350  # Latitude
+# Lm = 392  # Longitude
+# Mm = 350  # Latitude
+Lm = 359  # Longitude
+Mm = 439  # Latitude
 
 lon0 = -10.75
-lat0 = 52.15
+# lat0 = 52.15
+lat0 = 52.95
 
 lon1 = -10.75
 lat1 = 49.
 
-lon2 = -5.
+# lon2 = -5.
+lon2 = -5.83
 lat2 = 49.
 
-lon3 = -5.
-lat3 = 52.15
+# lon3 = -5.
+# lat3 = 52.15
+lon3 = -5.83
+lat3 = 52.95
 
 # map = Basemap(projection='lcc', lat_0=50.25, lat_1=49., lat_2=51, lon_0=-8.5,
 #               width=2000000, height=2000000, resolution='i')
@@ -87,7 +93,8 @@ lat3 = 52.15
 # map = Basemap(projection='lcc', lat_0=50.575, lat_1=50., lat_2=51., lon_0=-7.875,
 #               width=392000, height=350000, resolution='i')
 
-map = Basemap(projection='merc', llcrnrlat=49, urcrnrlat=52.15, llcrnrlon=-10.75, urcrnrlon=-5, resolution='f')
+# map = Basemap(projection='merc', llcrnrlat=49, urcrnrlat=52.15, llcrnrlon=-10.75, urcrnrlon=-5, resolution='f')
+map = Basemap(projection='merc', llcrnrlat=49, urcrnrlat=52.95, llcrnrlon=-10.75, urcrnrlon=-5.83, resolution='f')
 map.drawcoastlines()
 map.fillcontinents(color='coral', lake_color='aqua')
 # draw parallels and meridians.
@@ -131,7 +138,7 @@ for xx, yy in map.coastpolygons:
     hgrd.mask_polygon(vv, mask_value=False)  # hgrd.mask_polygon(vv, mask_value=0)
 
 # Edit the land mask interactively.
-# pyroms.grid.edit_mask_mesh(hgrd, proj=map)
+pyroms.grid.edit_mask_mesh(hgrd, proj=map)
 # edit_mask_mesh_ij is a faster version using imshow  but no map projection.
 coast = pyroms.utility.get_coast_from_map(map)
 pyroms.grid.edit_mask_mesh_ij(hgrd, coast=coast)
@@ -153,7 +160,7 @@ pyroms.grid.edit_mask_mesh_ij(hgrd, coast=coast)
 topo = -data_array
 
 # fix minimum depth
-hmin = 8
+hmin = 20
 topo = np.where(topo < hmin, hmin, topo)
 
 # interpolate new bathymetry (when gridded/regular)
@@ -175,6 +182,16 @@ h = np.where(h < hmin, hmin, h)
 idx = np.where(np.logical_or(np.equal(hgrd.mask_rho, 0), np.isnan(h)))
 h[idx] = hmin
 
+shvI = np.where(np.greater_equal(h, 190))
+h[shvI] = h[shvI[0]-1, shvI[1]] + h[shvI[0]+1, shvI[1]] + h[shvI[0], shvI[1]-1] + h[shvI[0], shvI[1]+1]
+h[shvI] = h[shvI]/4
+shvII = np.where(np.greater_equal(h, 190))
+h[shvII] = h[shvII[0]-1, shvII[1]] + h[shvII[0]+1, shvII[1]] + h[shvII[0], shvII[1]-1] + h[shvII[0], shvII[1]+1]
+h[shvII] = h[shvII]/4
+shvIII = np.where(np.greater_equal(h, 185))
+h[shvIII] = h[shvIII[0]-1, shvIII[1]] + h[shvIII[0]+1, shvIII[1]] + h[shvIII[0], shvIII[1]-1] + h[shvIII[0], shvIII[1]+1]
+h[shvIII] = h[shvIII]/4
+
 # save raw bathymetry
 hraw = h.copy()
 
@@ -183,7 +200,8 @@ RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
 print('Max Roughness value is: ', RoughMat.max())
 
 # smooth the raw bathy using the direct iterative method from Martinho and Batteen (2006)
-rx0_max = 0.35
+rx0_max = 0.2
+# h = bathy_smoothing.smoothing_PlusMinus_rx0(hgrd.mask_rho, h, rx0_max, GridAreas)
 h = bathy_smoothing.smoothing_Positive_rx0(hgrd.mask_rho, h, rx0_max)
 
 # check bathymetry roughness again
@@ -191,19 +209,27 @@ RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
 print('Max Roughness value is: ', RoughMat.max())
 
 # vertical coordinate
-theta_b = 2
+# theta_b = 2
+theta_b = 0.0
 theta_s = 7.0
-Tcline = 50
-N = 30
-# This fn gives in ROMS nomenclature Vtransform=2 and Vstretching=4
-vgrd = pyroms.vgrid.s_coordinate_4(h, theta_b, theta_s, Tcline, N, hraw=hraw)
+Tcline = 20
+N = 20
+
+# This fn gives in ROMS nomenclature:
+# vgrd = pyroms.vgrid.s_coordinate_4(h, theta_b, theta_s, Tcline, N, hraw=hraw)  # Vtransform=2 and Vstretching=4
+vgrd = pyroms.vgrid.s_coordinate_2(h, theta_b, theta_s, Tcline, N, hraw=hraw)  # Vtransform=2 and Vstretching=2
+# vgrd = pyroms.vgrid.s_coordinate_5(h, theta_b, theta_s, Tcline, N, hraw=hraw)  # Vtransform=2 and Vstretching=5
 # ROMS grid
-grd_name = 'CELTIC'
+# grd_name = 'CELTIC_II'
+
+grd_name = 'CELTIC_V'
 grd = pyroms.grid.ROMS_Grid(grd_name, hgrd, vgrd)
 
 # write grid to netcdf file
 # pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v1.nc')
-pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v2.nc')
+# pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v2.nc')
+# pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v3.nc')
+pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v5.nc')
 
 # If there are two different coordinate systems, transformation needed
 # **TransformPoint can only be used on single points, not arrays, loop needs to be introduced over array**

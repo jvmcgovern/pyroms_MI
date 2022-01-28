@@ -21,16 +21,21 @@ os.environ['PYROMS_GRIDID_FILE'] = '/home/pete/PycharmProjects/pyroms_MI/gridid_
 # year = int(sys.argv[1])
 # lst_year = [year]
 year = 2018
-lst_year = [2018]
+# lst_year = [2017, 2018, 2019]
+lst_year = [year]
 
-data_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CMEMS_IBI/'
-dst_dir = './'
+# data_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CMEMS_IBI/'
+data_dir = '/media/dskone/CELTIC/CMEMS_IBI/'
+
+# dst_dir = './'
+dst_dir = '/media/dskone/CELTIC/CMEMS_IBI/'
 
 lst_file = []
 
 for year in lst_year:
     year = np.str(year)
-    lst = subprocess.getoutput('ls ' + data_dir + 'CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_' + year + '*')
+    # lst = subprocess.getoutput('ls ' + data_dir + 'CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_' + year + '*')
+    lst = subprocess.getoutput('ls ' + data_dir + 'CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_' + year + '01*')
     lst = lst.split()
     lst_file = lst_file + lst
 
@@ -41,7 +46,7 @@ print(' ')
 src_grd = pyroms_toolbox.CGrid_GLORYS.get_nc_CGrid_CMEMS_IBI(
     '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/IBI-MFC_005_002_mask_bathy.nc', name='IBI', area='global')
 
-dst_grd = pyroms.grid.get_ROMS_grid('CELTIC')
+dst_grd = pyroms.grid.get_ROMS_grid('CELTIC_V')
 
 # remap
 # To avoid Mercator Ocean Fillvalue of -32767 infiltrating the interpolation process, overwrite/modify the FillValue to
@@ -58,34 +63,34 @@ dst_grd = pyroms.grid.get_ROMS_grid('CELTIC')
 #                      v
 # -a _FillValue,thetao,c,d,1.e37
 
-input_string = "/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CMEMS_IBI/" \
-               "CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_201801*_201801*_R*_RE01.nc"
-list_thetao = ['ncatted', '-a', '_FillValue,thetao,m,d,1.e37']
-list_so = ['ncatted', '-a', '_FillValue,so,m,d,1.e37']
-list_zos = ['ncatted', '-a', '_FillValue,zos,m,d,1.e37']
-list_uo = ['ncatted', '-a', '_FillValue,uo,m,d,1.e37']
-list_vo = ['ncatted', '-a', '_FillValue,vo,m,d,1.e37']
-list2 = glob.glob(input_string)
-for mf in range(len(list2)):
-    cthetao = list_thetao.copy()
-    cthetao = cthetao + [list2[mf]]
-    subprocess.call(cthetao[:])
-    cso = list_so.copy()
-    cso = cso + [list2[mf]]
-    subprocess.call(cso[:])
-    czos = list_zos.copy()
-    czos = czos + [list2[mf]]
-    subprocess.call(czos[:])
-    cuo = list_uo.copy()
-    cuo = cuo + [list2[mf]]
-    subprocess.call(cuo[:])
-    cvo = list_vo.copy()
-    cvo = cvo + [list2[mf]]
-    subprocess.call(cvo[:])
+# input_string = "/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CMEMS_IBI/" \
+#                "CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_20*_20*_R*_RE01.nc"
+# list_thetao = ['ncatted', '-a', '_FillValue,thetao,m,d,1.e37']
+# list_so = ['ncatted', '-a', '_FillValue,so,m,d,1.e37']
+# list_zos = ['ncatted', '-a', '_FillValue,zos,m,d,1.e37']
+# list_uo = ['ncatted', '-a', '_FillValue,uo,m,d,1.e37']
+# list_vo = ['ncatted', '-a', '_FillValue,vo,m,d,1.e37']
+# list2 = glob.glob(input_string)
+# for mf in range(len(list2)):
+#     cthetao = list_thetao.copy()
+#     cthetao = cthetao + [list2[mf]]
+#     subprocess.call(cthetao[:])
+#     cso = list_so.copy()
+#     cso = cso + [list2[mf]]
+#     subprocess.call(cso[:])
+#     czos = list_zos.copy()
+#     czos = czos + [list2[mf]]
+#     subprocess.call(czos[:])
+#     cuo = list_uo.copy()
+#     cuo = cuo + [list2[mf]]
+#     subprocess.call(cuo[:])
+#     cvo = list_vo.copy()
+#     cvo = cvo + [list2[mf]]
+#     subprocess.call(cvo[:])
 
 for file in lst_file:
     zeta = remap_bdry(file, 'zos', src_grd, dst_grd, dst_dir=dst_dir)
-    dst_grd = pyroms.grid.get_ROMS_grid('CELTIC', zeta=zeta)
+    dst_grd = pyroms.grid.get_ROMS_grid('CELTIC_V', zeta=zeta)
     remap_bdry(file, 'thetao', src_grd, dst_grd, dst_dir=dst_dir)
     remap_bdry(file, 'so', src_grd, dst_grd, dst_dir=dst_dir)
     remap_bdry_uv(file, src_grd, dst_grd, dst_dir=dst_dir)

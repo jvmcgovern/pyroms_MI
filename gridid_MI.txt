@@ -167,10 +167,43 @@ Tcline  = 250
 #
 id      = CELTIC
 name    = CELTIC
-grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v1.nc
+grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v2.nc
 N       = 30
 grdtype = roms
 Vtrans  = 2
-theta_s = 7
-theta_b = 2
+theta_s = 7.0
+theta_b = 0.1
 Tcline  = 50
+#
+#
+id      = CELTIC_II
+name    = CELTIC_II
+grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v3.nc
+N       = 30
+grdtype = roms
+Vtrans  = 2
+theta_s = 7.0
+theta_b = 0.1
+Tcline  = 50
+#
+#
+id      = CELTIC_IV
+name    = CELTIC_IV
+grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v4.nc
+N       = 30
+grdtype = roms
+Vtrans  = 2
+theta_s = 7.0
+theta_b = 0.1
+Tcline  = 50
+#
+#
+id      = CELTIC_V
+name    = CELTIC_V
+grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v5.nc
+N       = 20
+grdtype = roms
+Vtrans  = 2
+theta_s = 7.0
+theta_b = 0.0
+Tcline  = 20
