@@ -27,9 +27,9 @@ import sys
 
 # sys.path.insert(0,'/XXX/')
 
-from interp_Cgrid import *
-import croco_vgrid as vgrd
-import croco_glorys as glor
+from Oforc_GLORYS_python.interp_Cgrid import *
+import Oforc_GLORYS_python.croco_vgrid as vgrd
+import Oforc_GLORYS_python.croco_glorys as glor
 from progressbar import *
 from scipy.spatial import Delaunay
 

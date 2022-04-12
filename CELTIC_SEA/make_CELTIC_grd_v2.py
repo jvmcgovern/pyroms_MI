@@ -23,7 +23,8 @@ from osgeo import gdal
 # filename = r'C:\Users\jmcgovern\PycharmProjects\pyroms_MI\CELTICSEA\Bathymetry_CelticSea_50m.tif'
 # filename = r'C:\Users\jmcgovern\PycharmProjects\pyroms_MI\CELTICSEA\CelticSeaBathymetry_100m.tif'
 # filename = r'C:\Users\jmcgovern\PycharmProjects\pyroms_MI\CELTICSEA\EMODnet_Bathy_100m.tif'
-filename = 'EMODnet_Bathy_100m.tif'
+# filename = 'EMODnet_Bathy_100m.tif'
+filename = '/media/dskone/CELTIC/BATHYMETRY/EMODnet_Bathy_100m.tif'
 bath = gdal.Open(filename)
 bath_info = gdal.Info(filename)
 band1 = bath.GetRasterBand(1)
@@ -160,7 +161,9 @@ pyroms.grid.edit_mask_mesh_ij(hgrd, coast=coast)
 topo = -data_array
 
 # fix minimum depth
-hmin = 20
+# hmin = 20
+# hmin = 8
+hmin = 6
 topo = np.where(topo < hmin, hmin, topo)
 
 # interpolate new bathymetry (when gridded/regular)
@@ -222,14 +225,18 @@ vgrd = pyroms.vgrid.s_coordinate_2(h, theta_b, theta_s, Tcline, N, hraw=hraw)  #
 # ROMS grid
 # grd_name = 'CELTIC_II'
 
-grd_name = 'CELTIC_V'
+# grd_name = 'CELTIC_V'  # hmin = 20m
+# grd_name = 'CELTIC_V_hmin8'  # hmin = 8m
+grd_name = 'CELTIC_V_hmin6'  # hmin = 6m
 grd = pyroms.grid.ROMS_Grid(grd_name, hgrd, vgrd)
 
 # write grid to netcdf file
 # pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v1.nc')
 # pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v2.nc')
 # pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v3.nc')
-pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v5.nc')
+# pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v5.nc')
+# pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v5_h8.nc')
+pyroms.grid.write_ROMS_grid(grd, filename='CELTIC_grd_v5_h6.nc')
 
 # If there are two different coordinate systems, transformation needed
 # **TransformPoint can only be used on single points, not arrays, loop needs to be introduced over array**

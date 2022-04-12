@@ -48,9 +48,12 @@ if 1 == 1:
 
     # crocofiles_dir = my_home_dir + 'SWAG/Run_TEST/CROCO_FILES/'
     crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
-    # ininame = crocofiles_dir + 'croco_ini_PHY_CELTIC.nc'
-    ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC.nc'
-    grdname = crocofiles_dir + 'croco_grd.nc'
+    # ininame = crocofiles_dir + 'croco_ini_PHY_CELTIC.nc'  # was hmin = 20m
+    # ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h6.nc'  # was hmin = 6m
+    ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h8.nc'  # was hmin = 8m
+    # grdname = crocofiles_dir + 'croco_grd.nc'  # was hmin = 20m
+    # grdname = '/media/dskone/CELTIC/croco_grd_h6.nc'  # was hmin = 6m
+    grdname = '/media/dskone/CELTIC/croco_grd_h8.nc'  # was hmin = 8m
 
     N = 20
     theta_s = 7.
@@ -60,12 +63,14 @@ if 1 == 1:
 
     Yorig = 1990  # year origin of time : days since Yorig-01-01
 
-    Yini = 2005
+    # Yini = 2005
+    Yini = 2018
     Mini = 1
     Dini = 1
 
     # Date in form YYYYMMDD
-    ini_date = '20050101'
+    # ini_date = '20050101'
+    ini_date = '20180101'
 
     # glorysfiles_dir = my_home_dir + 'SWAG/GLORYS_FILES/'
     glorysfiles_dir = '/media/dskone/CELTIC/CMEMS_IBI/'
@@ -414,8 +419,6 @@ if 1 == 1:
 
     ncini['DIC'][tndx_ini, :, :, :] = dissic
 
-
-    #
     #
     # 4: U and V
     #

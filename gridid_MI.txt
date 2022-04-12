@@ -207,3 +207,25 @@ Vtrans  = 2
 theta_s = 7.0
 theta_b = 0.0
 Tcline  = 20
+#
+#
+id      = CELTIC_V_hmin8
+name    = CELTIC_V_hmin8
+grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v5_h8.nc
+N       = 20
+grdtype = roms
+Vtrans  = 2
+theta_s = 7.0
+theta_b = 0.0
+Tcline  = 20
+#
+#
+id      = CELTIC_V_hmin6
+name    = CELTIC_V_hmin6
+grdfile = /home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/CELTIC_grd_v5_h6.nc
+N       = 20
+grdtype = roms
+Vtrans  = 2
+theta_s = 7.0
+theta_b = 0.0
+Tcline  = 20
