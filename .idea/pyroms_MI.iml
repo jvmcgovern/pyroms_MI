@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/bathy_smoother" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/pyroms" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/pyroms_toolbox" isTestSource="false" />
+    </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (pyroms_MI)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

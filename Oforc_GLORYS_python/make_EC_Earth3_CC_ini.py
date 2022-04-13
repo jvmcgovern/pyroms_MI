@@ -16,6 +16,22 @@
 # 'vo_Omon_EC-Earth3-CC_ssp245_r1i1p1f1_gn_201501-201512.nc'
 # variable_frq_esm_case_exp_gn_period.nc
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+from netCDF4 import Dataset as netcdf
+from scipy.interpolate import griddata
+
+from datetime import date
+import sys
+
+# sys.path.insert(0,'')
+
+from interp_Cgrid import *
+import croco_vgrid as vgrd
+import croco_EC_Earth3_CC as ece3cc
+from progressbar import *
+
 # ESM name
 esm = 'EC-Earth3-CC'
 
@@ -24,12 +40,12 @@ frq = 'Omon'  # monthly
 # frq = 'Oyr'   # annual
 
 # Scenario case
-case = 'esm-hist'  # or 'historical'
-# case = 'ssp245'
+# case = 'esm-hist'  # or 'historical'
+case = 'ssp245'
 # case = 'ssp585'
 
 # Experiment ID
-exp = 'r1i1p1f1_gn'
+exp = 'r1i1p1f1'
 
 # Variable name in file
 variables_phy = ['zos', 'thetao', 'so', 'uo', 'vo']
@@ -56,22 +72,6 @@ vari_bgc_ssp_Oyr = ['po4', 'o2', 'zmicro', 'zmeso', 'chl', 'calc', 'talk', 'phyd
 # variables_atm = {'fco2nat', 'hfls', 'hfss', 'hur', 'hurs', 'hursmax', 'hursmin', 'pr', 'psl', 'rlds', 'rldscs',
 # 'rlus', 'rlut', 'rlutcs', 'rsds', 'rsdscs', 'rsdt', 'rsus', 'rsuscs', 'rsut', 'rsutcs', 'sfcWind', 'sfcWindmax',
 # 'ta', 'tas', 'tasmax', 'tasmin', 'tauu', 'tauv', 'tos', 'ts', 'ua', 'uas', 'va', 'vas'}
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-from netCDF4 import Dataset as netcdf
-from scipy.interpolate import griddata
-
-from datetime import date
-import sys
-
-# sys.path.insert(0,'')
-
-from Oforc_GLORYS_python.interp_Cgrid import *
-import Oforc_GLORYS_python.croco_vgrid as vgrd
-import croco_EC_Earth3_CC as ece3cc
-from progressbar import *
 
 if 1 == 1:
     # def main_func():
@@ -105,7 +105,7 @@ if 1 == 1:
     Yorig = 1984  # year origin of time : days since Yorig-01-01
 
     # Yini = 2005
-    Yini = 1984
+    Yini = 2015
     Mini = 1
     Dini = 1
 
@@ -121,7 +121,8 @@ if 1 == 1:
     # glorys_bgc_prefix = 'CMEMS_v5r1_IBI_BIO_MY_PdE_01dav_'
     # glorys_ending = '_R20201201_RE01.nc'
 
-    esmfiles_dir = '/media/dskthree/EC_Earth3_CC/NATIVE/PHY/'
+    esmphy_dir = '/media/dskthree/EC_Earth3_CC/NATIVE/PHY/'
+    esmbgc_dir = '/media/dskthree/EC_Earth3_CC/NATIVE/BGC/'
 
     Nzgoodmin = 4  # number minimum of good data points to use for the interpolation
     comp_delaunay = 1  # 1: compute delaunay triangulations - 0: use saved matrices (for debugging)
@@ -149,14 +150,14 @@ if 1 == 1:
     #
     # glorysname = glorysfiles_dir + glorys_prefix + ini_date + '_' + ini_date + glorys_ending
 
-    esmname = esmfiles_dir + '_' + variables_phy[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmname = esmphy_dir + variables_phy[1] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
               + period + '.nc'
     #
     # print(esmname)
     #
     # glorysnamebgc = glorysfiles_dir + glorys_bgc_prefix + ini_date + '_' + ini_date + glorys_ending
 
-    esmbgcname = esmfiles_dir + '_' + variables_bgc[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmbgcname = esmbgc_dir + variables_bgc[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                  + period + '.nc'
     #
     # print(esmbgcname)
@@ -339,7 +340,7 @@ if 1 == 1:
     #
     #
 
-    esmnamez = esmfiles_dir + '_' + variables_phy[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamez = esmphy_dir + '_' + variables_phy[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
               + period + '.nc'
     print(esmnamez)
     ncphyz = netcdf(esmnamez, 'r')
@@ -368,7 +369,7 @@ if 1 == 1:
     #
     #
 
-    esmnamet = esmfiles_dir + '_' + variables_phy[1] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamet = esmphy_dir + '_' + variables_phy[1] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
               + period + '.nc'
     print(esmnamet)
 
@@ -390,7 +391,7 @@ if 1 == 1:
     #
     #
 
-    esmnames = esmfiles_dir + '_' + variables_phy[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnames = esmphy_dir + '_' + variables_phy[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnames)
 
@@ -412,7 +413,7 @@ if 1 == 1:
     #
     #
 
-    esmnamen1 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamen1 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[0] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnamen1)
 
@@ -434,7 +435,7 @@ if 1 == 1:
     #
     #
 
-    esmnamen2 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[1] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamen2 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[1] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnamen2)
 
@@ -456,7 +457,7 @@ if 1 == 1:
     # #
     # #
     #
-    # esmnamep1 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    # esmnamep1 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
     #            + period + '.nc'
     # print(esmnamep1)
     # ncbgcp1 = netcdf(esmnamep1, 'r')
@@ -477,7 +478,7 @@ if 1 == 1:
     #
     #
 
-    esmnames1 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnames1 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnames1)
 
@@ -499,7 +500,7 @@ if 1 == 1:
     #
     #
 
-    esmnamef1 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[3] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamef1 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[3] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnamef1)
 
@@ -521,7 +522,7 @@ if 1 == 1:
     # #
     # #
     #
-    # esmnameo1 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    # esmnameo1 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
     #            + period + '.nc'
     # print(esmnameo1)
     #
@@ -543,7 +544,7 @@ if 1 == 1:
     #
     #
 
-    esmnamed1 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[4] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamed1 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[4] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnamed1)
 
@@ -566,7 +567,7 @@ if 1 == 1:
     #
     #
 
-    esmnamed2 = esmfiles_dir + '_' + vari_bgc_ssp_Omon[5] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamed2 = esmbgc_dir + '_' + vari_bgc_ssp_Omon[5] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                 + period + '.nc'
     print(esmnamed2)
 
@@ -591,14 +592,14 @@ if 1 == 1:
     #
     #
 
-    esmnameu1 = esmfiles_dir + '_' + variables_phy[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnameu1 = esmphy_dir + '_' + variables_phy[2] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnameu1)
 
     ncphyu1 = netcdf(esmnameu1, 'r')
     ncphyu1o = ncphyu1.variables
 
-    esmnamev1 = esmfiles_dir + '_' + variables_phy[3] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
+    esmnamev1 = esmphy_dir + '_' + variables_phy[3] + '_' + frq + '_' + esm + '_' + case + '_' + exp + '_gn_' \
                + period + '.nc'
     print(esmnamev1)
 

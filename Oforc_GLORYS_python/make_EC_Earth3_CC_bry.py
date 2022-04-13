@@ -29,7 +29,7 @@ import sys
 
 from Oforc_GLORYS_python.interp_Cgrid import *
 import Oforc_GLORYS_python.croco_vgrid as vgrd
-import Oforc_GLORYS_python.croco_glorys as glor
+import croco_EC_Earth3_CC as ece3cc
 from progressbar import *
 from scipy.spatial import Delaunay
 
@@ -44,13 +44,17 @@ if 1 == 1:
     #
     #
 
-    title = 'Boundary file using GLORYS'
+    title = 'Boundary file using from EC-Earth3-CC'
 
     # my_home_dir = '/home/penven/'
 
-    crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
+    # crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
+    crocofiles_dir = '/media/dskthree/EC_Earth3_CC/INTERP/HIST/'
+    # crocofiles_dir = '/media/dskthree/EC_Earth3_CC/INTERP/SSP245/'
+    # crocofiles_dir = '/media/dskthree/EC_Earth3_CC/INTERP/SSP585/'
     # bryname = crocofiles_dir + 'croco_bry_PHYBIO_CELTIC_h6.nc'
-    bryname = crocofiles_dir + 'croco_bry_PHYBIO_CELTIC_h8.nc'
+    # bryname = crocofiles_dir + 'croco_bry_PHYBIO_CELTIC_h8.nc'
+    bryname = crocofiles_dir + 'croco_bry_HIST_1984_CELTIC_h8.nc'  # was hmin = 8m
     # # grdname = crocofiles_dir + 'croco_grd.nc'
     # grdname = '/media/dskone/CELTIC/croco_grd_h6.nc'  # was hmin = 6m
     grdname = '/media/dskone/CELTIC/croco_grd_h8.nc'  # was hmin = 8m
@@ -66,15 +70,15 @@ if 1 == 1:
     time_bry = 0.
     cycle_bry = 0.
 
-    Yorig = 1990  # year origin of time : days since Yorig-01-01
+    Yorig = 1984  # year origin of time : days since Yorig-01-01
 
     # Ystart = 2005
-    Ystart = 2018
+    Ystart = 1984
     Mstart = 1
     Dstart = 1
 
     # Yend = 2005
-    Yend = 2018
+    Yend = 2014
     Mend = 12
     Dend = 31
 
@@ -84,6 +88,9 @@ if 1 == 1:
     glorysfiles_dir = '/media/dskone/CELTIC/CMEMS_IBI/'
     glorys_prefix = 'CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_'
     glorys_ending = '_R20201201_RE01.nc'
+
+    esmphy_dir = '/media/dskthree/EC_Earth3_CC/NATIVE/PHY/'
+    esmbgc_dir = '/media/dskthree/EC_Earth3_CC/NATIVE/BGC/'
 
     glorys_step = 1  # time step between outputs in GLORYS12 [days]
 
@@ -106,9 +113,9 @@ if 1 == 1:
     # Create the CROCO boundary file
     #
 
-    glor.create_bryfile(bryname, grdname, title, obc,
-                        theta_s, theta_b, hc, N,
-                        time_bry, cycle_bry, vtransform)
+    ece3cc.create_bryfile(bryname, grdname, title, obc,
+                          theta_s, theta_b, hc, N,
+                          time_bry, cycle_bry, vtransform)
 
     #
     # get the CROCO grid
@@ -208,7 +215,7 @@ if 1 == 1:
         (LonT_south, LatT_south, iminT_south, imaxT_south, jminT_south, jmaxT_south, elemT_south, coefT_south,
          LonU_south, LatU_south, iminU_south, imaxU_south, jminU_south, jmaxU_south, elemU_south, coefU_south,
          LonV_south, LatV_south, iminV_south, imaxV_south, jminV_south, jmaxV_south, elemV_south, coefV_south) \
-            = glor.get_delaunay_bry(lon_south, lat_south, dl, ncglo)
+            = ece3cc.get_delaunay_bry(lon_south, lat_south, dl, ncglo)
 
     if obc[1] == 1:
         #
@@ -227,7 +234,7 @@ if 1 == 1:
         (LonT_east, LatT_east, iminT_east, imaxT_east, jminT_east, jmaxT_east, elemT_east, coefT_east,
          LonU_east, LatU_east, iminU_east, imaxU_east, jminU_east, jmaxU_east, elemU_east, coefU_east,
          LonV_east, LatV_east, iminV_east, imaxV_east, jminV_east, jmaxV_east, elemV_east, coefV_east) \
-            = glor.get_delaunay_bry(lon_east, lat_east, dl, ncglo)
+            = ece3cc.get_delaunay_bry(lon_east, lat_east, dl, ncglo)
 
     if obc[2] == 1:
         #
@@ -246,7 +253,7 @@ if 1 == 1:
         (LonT_north, LatT_north, iminT_north, imaxT_north, jminT_north, jmaxT_north, elemT_north, coefT_north,
          LonU_north, LatU_north, iminU_north, imaxU_north, jminU_north, jmaxU_north, elemU_north, coefU_north,
          LonV_north, LatV_north, iminV_north, imaxV_north, jminV_north, jmaxV_north, elemV_north, coefV_north) \
-            = glor.get_delaunay_bry(lon_north, lat_north, dl, ncglo)
+            = ece3cc.get_delaunay_bry(lon_north, lat_north, dl, ncglo)
 
     if obc[3] == 1:
         #
@@ -265,7 +272,7 @@ if 1 == 1:
         (LonT_west, LatT_west, iminT_west, imaxT_west, jminT_west, jmaxT_west, elemT_west, coefT_west,
          LonU_west, LatU_west, iminU_west, imaxU_west, jminU_west, jmaxU_west, elemU_west, coefU_west,
          LonV_west, LatV_west, iminV_west, imaxV_west, jminV_west, jmaxV_west, elemV_west, coefV_west) \
-            = glor.get_delaunay_bry(lon_west, lat_west, dl, ncglo)
+            = ece3cc.get_delaunay_bry(lon_west, lat_west, dl, ncglo)
 
     #
     #  Close the GLORYS netcdf file
@@ -360,7 +367,7 @@ if 1 == 1:
             print(' Soutern Boundary')
             print(' ')
 
-            ncbry = glor.interp_bry('s', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
+            ncbry = ece3cc.interp_bry('s', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
                                     h_south, theta_s, theta_b, hc, N, vtransform,
                                     Nzgoodmin, depth, angle_south,
                                     LonT_south, LatT_south, iminT_south, imaxT_south, jminT_south, jmaxT_south,
@@ -379,7 +386,7 @@ if 1 == 1:
             print(' Eastern Boundary')
             print(' ')
 
-            ncbry = glor.interp_bry('e', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
+            ncbry = ece3cc.interp_bry('e', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
                                     h_east, theta_s, theta_b, hc, N, vtransform,
                                     Nzgoodmin, depth, angle_east,
                                     LonT_east, LatT_east, iminT_east, imaxT_east, jminT_east, jmaxT_east, elemT_east,
@@ -398,7 +405,7 @@ if 1 == 1:
             print(' Northern Boundary')
             print(' ')
 
-            ncbry = glor.interp_bry('n', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
+            ncbry = ece3cc.interp_bry('n', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
                                     h_north, theta_s, theta_b, hc, N, vtransform,
                                     Nzgoodmin, depth, angle_north,
                                     LonT_north, LatT_north, iminT_north, imaxT_north, jminT_north, jmaxT_north,
@@ -417,7 +424,7 @@ if 1 == 1:
             print(' Western Boundary')
             print(' ')
 
-            ncbry = glor.interp_bry('w', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
+            ncbry = ece3cc.interp_bry('w', ncglo, ncbgco, tndx_glo, ncbry, tndx_bry,
                                     h_west, theta_s, theta_b, hc, N, vtransform,
                                     Nzgoodmin, depth, angle_west,
                                     LonT_west, LatT_west, iminT_west, imaxT_west, jminT_west, jmaxT_west, elemT_west,
