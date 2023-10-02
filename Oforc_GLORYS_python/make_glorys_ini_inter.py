@@ -44,17 +44,6 @@ if 1 == 1:
 
     title = 'Initial file using GLORYS'
 
-    # my_home_dir = '/home/penven/'
-
-    # crocofiles_dir = my_home_dir + 'SWAG/Run_TEST/CROCO_FILES/'
-    crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
-    # ininame = crocofiles_dir + 'croco_ini_PHY_CELTIC.nc'  # was hmin = 20m
-    # ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h6.nc'  # was hmin = 6m
-    ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h8.nc'  # was hmin = 8m
-    # grdname = crocofiles_dir + 'croco_grd.nc'  # was hmin = 20m
-    # grdname = '/media/dskone/CELTIC/croco_grd_h6.nc'  # was hmin = 6m
-    grdname = '/media/dskone/CELTIC/croco_grd_h8.nc'  # was hmin = 8m
-
     N = 20
     theta_s = 7.
     theta_b = 0.
@@ -63,16 +52,27 @@ if 1 == 1:
 
     Yorig = 1990  # year origin of time : days since Yorig-01-01
 
-    # Yini = 2005
-    Yini = 2018
+    Yini = 2017
     Mini = 1
     Dini = 1
 
+    # crocofiles_dir = my_home_dir + 'SWAG/Run_TEST/CROCO_FILES/'
+    crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
+    ininame = crocofiles_dir + 'croco_ini_MERCATOR' + '_Y' + str(Yini) + 'M' + str(Mini).zfill(
+        2) + '.nc'
+    # ininame = crocofiles_dir + 'croco_ini_MERCATOR_Y2017M11.nc'  # was hmin = 20m
+    # ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h6.nc'  # was hmin = 6m
+    # ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h8.nc'  # was hmin = 8m
+    grdname = crocofiles_dir + 'croco_grd.nc'  # was hmin = 20m
+    # grdname = '/media/dskone/CELTIC/croco_grd_h6.nc'  # was hmin = 6m
+    # grdname = '/media/dskone/CELTIC/croco_grd_h8.nc'  # was hmin = 8m
+
     # Date in form YYYYMMDD
     # ini_date = '20050101'
-    ini_date = '20180101'
+    # ini_date = '20180101'
+    # ini_date = '20171101'
+    ini_date = str(Yini) + str(Mini).zfill(2) + str(Dini).zfill(2)
 
-    # glorysfiles_dir = my_home_dir + 'SWAG/GLORYS_FILES/'
     glorysfiles_dir = '/media/dskone/CELTIC/CMEMS_IBI/'
     glorys_prefix = 'CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_'
     glorys_bgc_prefix = 'CMEMS_v5r1_IBI_BIO_MY_PdE_01dav_'
@@ -124,7 +124,7 @@ if 1 == 1:
     # Initial file
     #
 
-    glor.create_ini_PISCES_NORESM(ininame, grdname, title, theta_s, theta_b, hc, N, Tini, vtransform)
+    glor.create_inifile(ininame, grdname, title, theta_s, theta_b, hc, N, Tini, vtransform)
 
     #
     # get the CROCO grid

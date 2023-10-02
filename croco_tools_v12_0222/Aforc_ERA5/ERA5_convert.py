@@ -96,12 +96,16 @@ for iyear in range(year_start, year_end + 1):
             data = conv_cff[k] * data
             data[np.where(data == mvalue)] = 9999.
 
-            #
-            # Convert time from hours since 1900-1-1 0:0:0 into days since Yorig-1-1 0:0:0
-            #
-
             time = time / 24.
-            time = time - date.toordinal(date(Yorig, 1, 1)) + date.toordinal(date(1900, 1, 1))
+            # #
+            # # Convert time from hours since 1900-1-1 0:0:0 into days since Yorig-1-1 0:0:0
+            # #
+            # time = time - date.toordinal(date(Yorig, 1, 1)) + date.toordinal(date(1900, 1, 1))
+
+            #
+            # Convert time from hours since 1900-1-1 0:0:0 into days since 1968-05-23 0:0:0
+            #
+            time = time - date.toordinal(date(Yorig, 5, 23)) + date.toordinal(date(1900, 1, 1))
 
             #
             # Changes names
@@ -112,12 +116,19 @@ for iyear in range(year_start, year_end + 1):
 
             if vname == 'v10':
                 vname = 'v10m'
+
+            if vname == 'msl':
+                vname = 'pmer'
+
             #
             # Create and write output netcdf file
             #
-
             fname_out = era5_dir_processed + '/' + vname.upper() + '_Y' + str(iyear) + 'M' + str(imonth).zfill(
                 2) + '.nc'
+
+            if vname == 'pmer':
+                fname_out = era5_dir_processed + '/' + vname.lower() + '_Y' + str(iyear) + 'M' + str(imonth).zfill(
+                    2) + '.nc'
 
             nw = netcdf(fname_out, mode='w', format='NETCDF4')
 
@@ -128,13 +139,17 @@ for iyear in range(year_start, year_end + 1):
             varlon = nw.createVariable('lon', 'f4', ('lon',))
             varlat = nw.createVariable('lat', 'f4', ('lat',))
             vartime = nw.createVariable('time', 'f4', ('time',))
-            vardata = nw.createVariable(vname.upper(), 'f4', ('time', 'lat', 'lon'))
+            if vname == 'pmer':
+                vardata = nw.createVariable(vname.lower(), 'f4', ('time', 'lat', 'lon'))
+            else:
+                vardata = nw.createVariable(vname.upper(), 'f4', ('time', 'lat', 'lon'))
             varlon.long_name = 'longitude of RHO-points'
             varlat.long_name = 'latitude of RHO-points'
             vartime.long_name = 'Time'
             varlon.units = 'degree_east'
             varlat.units = 'degree_north'
-            vartime.units = 'days since ' + str(Yorig) + '-1-1'
+            # vartime.units = 'days since ' + str(Yorig) + '-1-1'
+            vartime.units = 'days since ' + str(Yorig) + '-5-23'
             vardata.missing_value = 9999.
             vardata.units = units[k]
             vardata.long_name = vlong

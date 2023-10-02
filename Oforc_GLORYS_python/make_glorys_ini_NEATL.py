@@ -15,6 +15,7 @@
 #
 #
 
+import glob
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -44,39 +45,45 @@ if 1 == 1:
 
     title = 'Initial file using GLORYS'
 
-    # my_home_dir = '/home/penven/'
+    N = 40
+    theta_s = 4.
+    theta_b = 0.85
+    hc = 10.
+    vtransform = 1
 
-    # crocofiles_dir = my_home_dir + 'SWAG/Run_TEST/CROCO_FILES/'
-    crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
-    # ininame = crocofiles_dir + 'croco_ini_PHY_CELTIC.nc'  # was hmin = 20m
-    # ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h6.nc'  # was hmin = 6m
-    ininame = crocofiles_dir + 'croco_ini_PHYBIO_CELTIC_h8.nc'  # was hmin = 8m
-    # grdname = crocofiles_dir + 'croco_grd.nc'  # was hmin = 20m
-    # grdname = '/media/dskone/CELTIC/croco_grd_h6.nc'  # was hmin = 6m
-    grdname = '/media/dskone/CELTIC/croco_grd_h8.nc'  # was hmin = 8m
+    # year origin of time : days since Yorig-Morig-Dorig
+    Yorig = 1968
+    Morig = 5
+    Dorig = 23
 
-    N = 20
-    theta_s = 7.
-    theta_b = 0.
-    hc = 20.
-    vtransform = 2
-
-    Yorig = 1990  # year origin of time : days since Yorig-01-01
-
-    # Yini = 2005
-    Yini = 2018
+    Yini = 2014
     Mini = 1
     Dini = 1
 
+    # crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/CELTIC_SEA/'
+    crocofiles_dir = '/home/pete/PycharmProjects/pyroms_MI/NEATL/'
+    # ininame = crocofiles_dir + 'croco_ini_MERCATOR' + '_Y' + str(Yini) + 'M' + str(Mini).zfill(
+    #     2) + '.nc'
+    ininame = crocofiles_dir + 'IC_IBI_NEA_IRL_2014.nc'
+
+    # grdname = crocofiles_dir + 'croco_grd.nc'  # was hmin = 20m
+    grdname = crocofiles_dir + 'ne_atlantic_r4_v2.nc'
+
     # Date in form YYYYMMDD
     # ini_date = '20050101'
-    ini_date = '20180101'
+    # ini_date = '20180101'
+    # ini_date = '20171101'
+    ini_date = str(Yini) + str(Mini).zfill(2) + str(Dini).zfill(2)
+    ini_yrmth = str(Yini) + str(Mini).zfill(2)
 
-    # glorysfiles_dir = my_home_dir + 'SWAG/GLORYS_FILES/'
-    glorysfiles_dir = '/media/dskone/CELTIC/CMEMS_IBI/'
-    glorys_prefix = 'CMEMS_v5r1_IBI_PHY_MY_PdE_01dav_'
-    glorys_bgc_prefix = 'CMEMS_v5r1_IBI_BIO_MY_PdE_01dav_'
-    glorys_ending = '_R20201201_RE01.nc'
+    glorysfiles_dir = '/media/dskthree/CMEMS_GLO/'
+    # ex 'mercatorglorys12v1_gl12_mean_20150208_R20150211_crop.nc'
+    glorys_prefix = 'mercatorglorys12v1_gl12_mean_'
+    glorys_ending = '.nc'
+    # glorys_bgc_prefix = 'CMEMS_v5r1_IBI_BIO_MY_PdE_01dav_'
+    glorys_bgc_prefix = 'mercatorfreebiorys2v4_global_mean_'
+    glorys_bgc_ending = '.nc'
+
     Nzgoodmin = 4  # number minimum of good data points to use for the interpolation
     comp_delaunay = 1  # 1: compute delaunay triangulations - 0: use saved matrices (for debugging)
 
@@ -95,20 +102,20 @@ if 1 == 1:
 
     date_str = (Yini, Mini, Dini)
 
-    Tini = date.toordinal(date(Yini, Mini, Dini)) - date.toordinal(date(Yorig, 1, 1))
-    Tini = Tini + 0.5  # 12H
+    Tini = date.toordinal(date(Yini, Mini, Dini)) - date.toordinal(date(Yorig, Morig, Dorig))
+    # Tini = Tini + 0.5  # 12H
     Tini_str = "%06d" % Tini
 
     #
     # Get the GLRYS file name from the date (only one time step per file)
     #
 
-    glorysname = glorysfiles_dir + glorys_prefix + ini_date + '_' + ini_date + glorys_ending
+    glorysname = glorysfiles_dir + glorys_prefix + ini_date + '_R*' + glorys_ending
 
     print(glorysname)
 
-    glorysnamebgc = glorysfiles_dir + glorys_bgc_prefix + ini_date + '_' + ini_date + glorys_ending
-
+    # glorysnamebgc = glorysfiles_dir + glorys_bgc_prefix + ini_date + glorys_bgc_ending
+    glorysnamebgc = glorysfiles_dir + glorys_bgc_prefix + ini_yrmth + glorys_bgc_ending
     print(glorysnamebgc)
 
     #
@@ -124,7 +131,7 @@ if 1 == 1:
     # Initial file
     #
 
-    glor.create_ini_PISCES_NORESM(ininame, grdname, title, theta_s, theta_b, hc, N, Tini, vtransform)
+    glor.create_inifile(ininame, grdname, title, theta_s, theta_b, hc, N, Tini, vtransform)
 
     #
     # get the CROCO grid
@@ -159,8 +166,9 @@ if 1 == 1:
     #
     # get a GLORYS subgrid
     #
+    glofile = sorted(glob.glob(glorysname))
 
-    ncphy = netcdf(glorysname, 'r')
+    ncphy = netcdf(glofile[0], 'r')
     ncphyo = ncphy.variables
     depth = np.array(ncphyo['depth'][:])
 
@@ -218,6 +226,22 @@ if 1 == 1:
     [Nz] = np.shape(depth)
 
     #
+    # get GLORYS positions and indices at T-points
+    #
+
+    latTn = np.array(ncbgco['latitude'][:])
+    lonTn = np.array(ncbgco['longitude'][:])
+
+    iminTn = glor.geo_idx(lonmin - 1, lonTn)
+    imaxTn = glor.geo_idx(lonmax + 1, lonTn)
+    jminTn = glor.geo_idx(latmin - 1, latTn)
+    jmaxTn = glor.geo_idx(latmax + 1, latTn)
+
+    lonTn = lonTn[iminTn:imaxTn]
+    latTn = latTn[jminTn:jmaxTn]
+    (LonTn, LatTn) = np.meshgrid(lonTn, latTn)
+
+    #
     # Horizontal and vertical interp/extrapolations
     #
     print(' ')
@@ -241,6 +265,11 @@ if 1 == 1:
         coefnorm = np.sum(coefT, axis=2)
         coefT = coefT / coefnorm[:, :, np.newaxis]
 
+        print('Compute Delaunay triangulation from GLORYS BGC T-points to CROCO rho_points...')
+        [elemTn, coefTn] = glor.get_tri_coef(LonTn, LatTn, lon_rho, lat_rho, 1)
+        coefnorm = np.sum(coefTn, axis=2)
+        coefTn = coefTn / coefnorm[:, :, np.newaxis]
+
         print('Compute Delaunay triangulation from GLORYS U-points to CROCO rho_points...')
         [elemU, coefU] = glor.get_tri_coef(LonU, LatU, lon_rho, lat_rho, 1)
         coefnorm = np.sum(coefU, axis=2)
@@ -255,8 +284,9 @@ if 1 == 1:
         # Save the Delaunay triangulation matrices
         #
 
-        np.savez('coeffs.npz', coefT=coefT, elemT=elemT,
-                 coefU=coefU, elemU=elemU, coefV=coefV, elemV=elemV)
+        np.savez('coeffs_NEATL.npz', coefT=coefT, elemT=elemT,
+                 coefU=coefU, elemU=elemU, coefV=coefV, elemV=elemV,
+                 coefTn=coefTn, elemTn=elemTn)
 
     else:
 
@@ -265,13 +295,15 @@ if 1 == 1:
         #
 
         print('Load Delaunay triangulation...')
-        data = np.load('coeffs.npz')
+        data = np.load('coeffs_NEATL.npz')
         coefT = data['coefT']
         elemT = data['elemT']
         coefU = data['coefU']
         elemU = data['elemU']
         coefV = data['coefV']
         elemV = data['elemV']
+        coefTn = data['coefTn']
+        elemTn = data['elemTn']
 
     print('Delaunay triangulation done')
 
@@ -322,7 +354,6 @@ if 1 == 1:
 
     ncini['salt'][tndx_ini, :, :, :] = salt
 
-
     #
     #
     # 3: Nitrate
@@ -331,26 +362,26 @@ if 1 == 1:
 
     print('Interpolate Nitrate...')
 
-    no3 = glor.interp3d(ncbgco, 'no3', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
+    no3 = glor.interp3d(ncbgco, 'no3', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn, LatTn,
+                        coefTn, elemTn, '_FillValue')
 
     ncini['NO3'][tndx_ini, :, :, :] = no3
-
-
     #
     #
-    # 3: Ammonium
+    # #
+    # #
+    # # 3: Ammonium
+    # #
+    # #
+    #
+    # print('Interpolate Ammonium...')
+    #
+    # nh4 = glor.interp3d(ncbgco, 'nh4', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
+    #                     coefT, elemT, '_FillValue')
+    #
+    # ncini['NH4'][tndx_ini, :, :, :] = nh4
     #
     #
-
-    print('Interpolate Ammonium...')
-
-    nh4 = glor.interp3d(ncbgco, 'nh4', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
-
-    ncini['NH4'][tndx_ini, :, :, :] = nh4
-
-
     #
     #
     # 3: Orthophosphate
@@ -359,11 +390,10 @@ if 1 == 1:
 
     print('Interpolate Orthophosphate...')
 
-    po4 = glor.interp3d(ncbgco, 'po4', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
+    po4 = glor.interp3d(ncbgco, 'po4', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn, LatTn,
+                        coefTn, elemTn, '_FillValue')
 
     ncini['PO4'][tndx_ini, :, :, :] = po4
-
 
     #
     #
@@ -373,11 +403,10 @@ if 1 == 1:
 
     print('Interpolate Silicate...')
 
-    si = glor.interp3d(ncbgco, 'si', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
+    si = glor.interp3d(ncbgco, 'si', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn, LatTn,
+                       coefTn, elemTn, '_FillValue')
 
     ncini['Si'][tndx_ini, :, :, :] = si
-
 
     #
     #
@@ -387,11 +416,10 @@ if 1 == 1:
 
     print('Interpolate Iron...')
 
-    fe = glor.interp3d(ncbgco, 'fe', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
+    fe = glor.interp3d(ncbgco, 'fe', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn, LatTn,
+                       coefTn, elemTn, '_FillValue')
 
     ncini['FER'][tndx_ini, :, :, :] = fe
-
 
     #
     #
@@ -401,23 +429,36 @@ if 1 == 1:
 
     print('Interpolate Dissolved Oxygen...')
 
-    o2 = glor.interp3d(ncbgco, 'o2', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
+    o2 = glor.interp3d(ncbgco, 'o2', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn, LatTn,
+                       coefTn, elemTn, '_FillValue')
 
     ncini['O2'][tndx_ini, :, :, :] = o2
 
     #
     #
-    # 3: Dissolved Oxygen
+    # 3: Dissolved Inorganic Carbon
     #
     #
 
-    print('Interpolate Dissolved Oxygen...')
+    print('Interpolate Dissolved Inorganic Carbon...')
+    #
+    # dissic = glor.interp3d(ncbgco, 'dissic', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn,
+    #                        LatTn, coefTn, elemTn, '_FillValue')
+    #
+    ncini['DIC'][tndx_ini, :, :, :] = 2150.*np.ones_like(o2)
 
-    dissic = glor.interp3d(ncbgco, 'dissic', tndx_glo, Nzgoodmin, depth, z_rho, iminT, imaxT, jminT, jmaxT, LonT, LatT,
-                         coefT, elemT, 'add_offset')
+    #
+    #
+    # 3: Total Alkalinity
+    #
+    #
 
-    ncini['DIC'][tndx_ini, :, :, :] = dissic
+    print('Interpolate Total Alkalinity...')
+    #
+    # dissic = glor.interp3d(ncbgco, 'dissic', tndx_glo, Nzgoodmin, depth, z_rho, iminTn, imaxTn, jminTn, jmaxTn, LonTn,
+    #                        LatTn, coefTn, elemTn, '_FillValue')
+    #
+    ncini['TALK'][tndx_ini, :, :, :] = 2350.*np.ones_like(o2)
 
     #
     # 4: U and V
@@ -456,9 +497,10 @@ if 1 == 1:
     ncphy.close()
     ncin.close()
 
-    print('Figure')
-    plt.contourf(lon_rho, lat_rho, temp[N - 1, :, :])
-    plt.show()
+    #
+    # print('Figure')
+    # plt.contourf(lon_rho, lat_rho, temp[N - 1, :, :])
+    # plt.show()
 
 #  return
 

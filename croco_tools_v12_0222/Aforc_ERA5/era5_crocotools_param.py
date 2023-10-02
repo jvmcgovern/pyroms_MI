@@ -10,18 +10,23 @@
 #
 # config_dir = '../croco/Run_TEST/'  # must be the same than crocotools_param
 config_dir = 'path_to_my_run_dir/'   # must be the same than crocotools_param
-config_name = 'CELTIC_PISCES_II'
+# config_name = 'CELTIC_PISCES_II'
+config_name = 'NEATL1KM_PISCES'
 #
 # Original ERA5 directory
 #
 # Folder position: '/media/dskone/CELTIC/ECMWF/ERA5'
 # era5_dir_raw = config_dir + 'DATA/ERA5_native_' + config_name
-era5_dir_raw = '/media/dskone/CELTIC/ECMWF/ERA5/ERA5_native_' + config_name
+# era5_dir_raw = '/media/dskone/CELTIC/ECMWF/ERA5/ERA5_native_' + config_name
+era5_dir_raw = '/media/dskone/NEATL1KM/ECMWF/ERA5/ERA5_native_' + config_name
+
 #
 # Output ERA5 directory
 #
 # era5_dir_processed = config_dir + 'DATA/ERA5_' + config_name
-era5_dir_processed = '/media/dskone/CELTIC/ECMWF/ERA5/ERA5_' + config_name
+# era5_dir_processed = '/media/dskone/CELTIC/ECMWF/ERA5/ERA5_native_' + config_name
+era5_dir_processed = '/media/dskone/NEATL1KM/ECMWF/ERA5/ERA5_native_' + config_name
+
 #
 #
 # Dates limits
@@ -29,10 +34,10 @@ era5_dir_processed = '/media/dskone/CELTIC/ECMWF/ERA5/ERA5_' + config_name
 # Downloading in ERA5_request
 # year_start = 2004
 # month_start = 12
-year_start = 2005
-month_start = 11
-year_end = 2006
-month_end = 1
+# year_start = 2020
+# month_start = 1
+# year_end = 2021
+# month_end = 12
 # year_start = 2017
 # month_start = 12
 # year_end = 2019
@@ -52,15 +57,26 @@ month_end = 1
 # month_start = 1
 # year_end = 2019
 # month_end = 1
+# # Conversion of data using ERA5_convert total
+# year_start = 1993
+# month_start = 1
+# year_end = 2021
+# month_end = 12
+
+year_start = 2014
+month_start = 2
+year_end = 2014
+month_end = 12
 
 #
 # Year origin of time
 #
-Yorig = 1990
+# Yorig = 1990  # Joe McGovern
+Yorig = 1968  # Hazem Nagy
 #
 # Overlapping days (at the beginning/end of each month)
 #
-n_overlap = 0
+n_overlap = 3
 #
 # Request time (daily hours '00/01/.../23')
 #
@@ -91,33 +107,53 @@ else:
     # latmin = 49
     # latmax = 52.95
 
-    lonmin = -11
-    lonmax = -5
-    latmin = 48.75
-    latmax = 53.25
+    # # Celtic Sea Model
+    # lonmin = -11
+    # lonmax = -5
+    # latmin = 48.75
+    # latmax = 53.25
+    #
+    # dl = 1./110.
+
+    # NEATL Model
+    lonmin = -31
+    lonmax = 9.75
+    latmin = 39.75
+    latmax = 64.25
 
     dl = 1./110.
 #
-# Variable names and conversion coefficients  
+# Variable names and conversion coefficients
 # TP: convert from accumlated m in a hour into kg m-2 s-1
 #
 cff_tp = 1000./3600.  # m in 1 hour -> kg m-2 s-1
 # Heat flux J m-2 in one hour into W m-2
 #
 cff_heat = 1./3600.   # J m-2 in 1 hour -> W m-2
+
+cff_press = 0.01      # Pa to millibar
+
+cff_radlw = -1.
 # Names, conversion coefficients and new units
 #
 # variables = ['lsm'  , 'sst' , 'tp'        , 'strd'   , 'ssr'     , 't2m'  , 'q'      , 'u10'  , 'v10'  ]
 # conv_cff  = [ 1.    ,  1.   ,  cff_tp     ,  cff_heat,  cff_heat ,  1.    ,  1.      ,  1.    ,  1.    ]
 # units     = ['(0-1)', 'K'   ,  'kg m-2 s-1', 'W m-2' , 'W m-2'   , 'K'    , 'kg kg-1', 'm s-1', 'm s-1']
-# variables = ['lsm'  , 'sst' ,  'tp'       , 'strd'   , 'ssr'     , 't2m'  ,  'q'     , 'u10',   'v10', 'msl', 'd2m', 'msdwlwrf', 'msnlwrf', 'msnswrf', 'mtpr']  # note lsm is land_sea_mask
 
-variables = ['lsm', 'sst', 'tp', 'strd', 'ssr', 't2m', 'q', 'u10', 'v10',
-             'tcc', 'msl', 'd2m', 'ewss', 'nwss',
-             'msdwlwrf', 'msnlwrf', 'msnswrf', 'mtpr',
-             'msshf', 'mslhf', 'msdwswrf', 'meets', 'mntss']  # note lsm is land_sea_mask
+# variables = ['lsm'  , 'sst' ,  'tp'       , 'strd'   , 'ssr'     , 't2m'  ,  'q'     , 'u10',   'v10', 'msl',
+# 'd2m', 'msdwlwrf', 'msnlwrf', 'msnswrf', 'mtpr']  # note lsm is land_sea_mask
 
+# variables = ['lsm', 'sst', 'tp', 'strd', 'ssr', 't2m', 'q', 'u10', 'v10',
+#              'tcc', 'msl', 'd2m', 'ewss', 'nwss',
+#              'msdwlwrf', 'msnlwrf', 'msnswrf', 'mtpr',
+#              'msshf', 'mslhf', 'msdwswrf', 'meets', 'mntss']  # note lsm is land_sea_mask
 
+variables = ['lsm'  ,'sst' ,'tp'        ,'strd'  ,'ssr'    ,'t2m' ,'q'      ,'u10'  ,'v10'  ,'msl'     ,'msnlwrf']
+# # Reconsidering converting sea level pressure from Pa (Pascal) to mbar (millibar)
+# conv_cff  = [1.     ,1.    ,cff_tp      ,cff_heat,cff_heat ,1.    ,1.       ,1.     ,1.     ,cff_press ,cff_radlw]
+# units     = ['(0-1)','K'   ,'kg m-2 s-1','W m-2' ,'W m-2'  ,'K'   ,'kg kg-1','m s-1','m s-1','mbar'    ,'W m-2'  ]
+conv_cff  = [1.     ,1.    ,cff_tp      ,cff_heat,cff_heat ,1.    ,1.       ,1.     ,1.     ,1.        ,cff_radlw]
+units     = ['(0-1)','K'   ,'kg m-2 s-1','W m-2' ,'W m-2'  ,'K'   ,'kg kg-1','m s-1','m s-1','Pa'      ,'W m-2'  ]
 
 # *******************************************************************************
 #                         E N D     U S E R  *  O P T I O N S

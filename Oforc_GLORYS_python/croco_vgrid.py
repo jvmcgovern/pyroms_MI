@@ -33,7 +33,6 @@
 # If they are both NaNs perform the integration from the bottom
 # to the surface.
 #
-#
 # * (LON,LAT,X,Z,VAR)=get_section(lonsec,latsec,var,lon,lat,
 #                       rmask,h,zeta,theta_s,theta_b,hc,N,vtransform)
 #  Extract a vertical slice in any direction (or along a curve).
@@ -221,9 +220,9 @@ def zlevs(h, zeta, theta_s, theta_b, hc, N, type, vtransform):
         M, L = np.squeeze(np.shape(h))
     elif Ndim == 1:
         L = np.squeeze(np.shape(h))
-    else:
-        print('zlevs: error - incorrect dimension for h')
-        return
+    # else:
+    #     print('zlevs: error - incorrect dimension for h')
+    #     return
 
     hmin = h.min()
     hmax = h.max()
@@ -277,6 +276,8 @@ def zlevs(h, zeta, theta_s, theta_b, hc, N, type, vtransform):
         z = np.zeros([Nmax, M, L])
     elif Ndim == 1:
         z = np.zeros([Nmax, L])
+    elif Ndim == 0:
+        z = np.zeros([Nmax])
 
     for k in np.arange(0, Nmax):
 
@@ -290,6 +291,8 @@ def zlevs(h, zeta, theta_s, theta_b, hc, N, type, vtransform):
                 z[k, :, :] = z0 + zeta * (1. + z0 * hinv)
             elif Ndim == 1:
                 z[k, :] = z0 + zeta * (1. + z0 * hinv)
+            elif Ndim == 0:
+                z[k] = z0 + zeta * (1. + z0 * hinv)
 
         elif vtransform == 2:
 
@@ -301,6 +304,8 @@ def zlevs(h, zeta, theta_s, theta_b, hc, N, type, vtransform):
                 z[k, :, :] = z0 * h * hinv + zeta * (1. + z0 * hinv)
             elif Ndim == 1:
                 z[k, :] = z0 * h * hinv + zeta * (1. + z0 * hinv)
+            elif Ndim == 0:
+                z[k] = z0 * h * hinv + zeta * (1. + z0 * hinv)
 
     return z
 

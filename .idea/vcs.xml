@@ -2,6 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/downscale_CS_MI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/interpolate-orca" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/matlab2python" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/sosie_MI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sosie_archive/sosie_MI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ttide_py_MI" vcs="Git" />
   </component>
 </project>
